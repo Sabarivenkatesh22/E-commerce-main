@@ -1,0 +1,10 @@
+- add role check and verification check in api routes
+- Products API
+- product apis to add colours, tags, points, photos, price and quantity
+- update history for all seller, admin, buyer
+- Admin verification APIs
+- Seperate apis fro adding payment methods, check cod
+
+
+
+http://{{baseurl}}:{{baseport}}/api/user/login

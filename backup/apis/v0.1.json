@@ -1,0 +1,237 @@
+{
+	"info": {
+		"_postman_id": "eb15efee-6cb8-4afb-a145-de93ae43dfb0",
+		"name": "e-commerce-template-s1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "register",
+			"item": [
+				{
+					"name": "Buyer Registration",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"123@test.com\",\"username\":\"asd\",\"firstname\":\"asd\",\"lastname\":\"asd\",\"password\":\"asd\",\"contactNumber\":\"12341234232323\"}"
+						},
+						"url": {
+							"raw": "http://{{baseurl}}:{{baseport}}/api/user/register",
+							"protocol": "http",
+							"host": [
+								"{{baseurl}}"
+							],
+							"port": "{{baseport}}",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Seller Registration",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"1213@test.com\",\"username\":\"asd1\",\"firstname\":\"asd\",\"lastname\":\"asd\",\"password\":\"asd\",\"contactNumber\":\"12341234232323\"}"
+						},
+						"url": {
+							"raw": "http://{{baseurl}}:{{baseport}}/api/seller/register",
+							"protocol": "http",
+							"host": [
+								"{{baseurl}}"
+							],
+							"port": "{{baseport}}",
+							"path": [
+								"api",
+								"seller",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Registration",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"12131@test.com\",\"username\":\"asd11\",\"firstname\":\"asd\",\"lastname\":\"asd\",\"password\":\"asd\",\"contactNumber\":\"12341234232323\"}"
+						},
+						"url": {
+							"raw": "http://{{baseurl}}:{{baseport}}/api/dummypath/admin/register",
+							"protocol": "http",
+							"host": [
+								"{{baseurl}}"
+							],
+							"port": "{{baseport}}",
+							"path": [
+								"api",
+								"dummypath",
+								"admin",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "login",
+			"item": [
+				{
+					"name": "Buyer Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"123@test.com\",\"password\":\"asd\"}"
+						},
+						"url": {
+							"raw": "http://{{baseurl}}:{{baseport}}/api/user/login",
+							"protocol": "http",
+							"host": [
+								"{{baseurl}}"
+							],
+							"port": "{{baseport}}",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Seller Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"1213@test.com\",\"password\":\"asd\"}"
+						},
+						"url": {
+							"raw": "http://{{baseurl}}:{{baseport}}/api/seller/login",
+							"protocol": "http",
+							"host": [
+								"{{baseurl}}"
+							],
+							"port": "{{baseport}}",
+							"path": [
+								"api",
+								"seller",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"12131@test.com\",\"password\":\"asd\"}"
+						},
+						"url": {
+							"raw": "http://{{baseurl}}:{{baseport}}/api/dummypath/admin/login",
+							"protocol": "http",
+							"host": [
+								"{{baseurl}}"
+							],
+							"port": "{{baseport}}",
+							"path": [
+								"api",
+								"dummypath",
+								"admin",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseurl",
+			"value": "localhost"
+		},
+		{
+			"key": "baseport",
+			"value": "7000"
+		}
+	]
+}

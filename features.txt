@@ -1,0 +1,23 @@
+# End points , input and output data for all api's will be updated later after completing all the operations.
+
+Login and Registration 
+
+User:
+    History 
+    Cartlist
+    DeliveryPage
+    Wishlist
+
+Product:
+        Adding products [Depends on user type]
+        History 
+        Display page (after successful registration we will redirect to this page)
+
+
+
+# frontend people make sure you build a template for each and every features listed in User and Product 
+# frontend people work with these topics as of now .. I will update the endpoints one by one so that 
+# we can test the APIs as fast as possible.
+
+
+For Cart when user presses cart button for a product make a post request with the productid to the respective api
