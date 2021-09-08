@@ -53,6 +53,7 @@ router.post("/user/login", loginController.userLogin); //TESTED
 
 //USER-VIEW
 router.get("/user/:userId/view", userById, requireSignin, isAuth, userViewController.userDetails);
+router.get("/user/:userId/allUsers", userViewController.getAllUsers);
 //router.get("/dummypath/admin/:userId/view", userById, requireSignin, isAuth, userViewController.userAdminDetails);
 
 //USER-UPDATE
@@ -81,7 +82,7 @@ router.post("/user/:userId/deleteDeliveryItem", userById, requireSignin, isAuth,
 //PRODUCT-ADD (only sellers permission)
 router.post("/seller/:userId/product/add", userById, requireSignin, isAuth, restrictTo("seller"), productAddController.addProduct);
 // PRODUCT VIEW 
-router.get("/products/view", productViewController.allProducts);
+router.get("/products/view",userById, requireSignin, isAuth, productViewController.allProducts);
 
 //PRODUCT-EDIT (only sellers permission)
 router.post("/seller/:userId/product/edit", userById, requireSignin, isAuth, restrictTo("seller"), productEditController.editProduct);
@@ -101,8 +102,11 @@ router.post("/seller/:userId/product/update/discount", userById, requireSignin, 
 //PRODUCT-IMAGE (only sellers permission except view image)
 router.post("/seller/:userId/product/image/upload", uploadImageProduct.array('image[]'), productImageController.addImagesProduct);
 
-// ADDING REVIEWS
-router.post("/user/:userId/product/:productId/review", userById, requireSignin, isAuth, reviewController.addReview);
+// REVIEWS
+router.post("/user/:userId/product/:productId/review/add",userById, requireSignin, isAuth,  reviewController.addReview);
+router.get("/user/:userId/product/:productId/review/delete",userById, requireSignin, isAuth,  reviewController.delReview);
+router.post("/user/:userId/product/:productId/review/update", userById, requireSignin, isAuth, reviewController.updateReview);
+router.get("/user/:userId/review/getAllReview", userById, requireSignin, isAuth, reviewController.getAllReview);
 
 
 

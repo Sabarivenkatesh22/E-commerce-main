@@ -25,11 +25,11 @@ const reviewSchema = new mongoose.Schema({
 
 });
 
-// reviewSchema.virtual('productDetails',{
-//     ref:'product',
-//     foreignField:'productId',
-//     localField:'productId'
-//   });
+reviewSchema.virtual('productDetails',{
+    ref:'product',
+    foreignField:'productId',
+    localField:'productId'
+  });
 
 
 

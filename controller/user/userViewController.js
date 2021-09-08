@@ -74,6 +74,20 @@ class UserViewController {
 // }
 //   }
 
+async getAllUsers(req, res) {
+    try {
+        const allUsers = await User.find();
+    res.status(200).json({
+        status:"success",
+        results: allUsers.length,
+        allUsers
+    });
+    } catch (error) {
+        res.status(401).json(new validationerror(error.message, 401));
+    }
+    
+}
+
 }
 
 const userViewController = new UserViewController()

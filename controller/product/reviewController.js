@@ -20,6 +20,54 @@ class ReviewController {
         }
        
     }
+
+    async delReview(req, res) {
+        try {
+            var deletedReview = await Review.findOneAndDelete({ customerId: req.params.userId },{productId:req.params.productId});
+            // var result = req.params.productId;
+            // var index ;
+            // result.forEach(e => {
+            //     if (deletedReview.productId.includes(e)) {
+            //         index =deletedReview.productId.indexOf(e);
+            //         if (index > -1) {
+            //             deletedReview.productId.splice(index, 1);
+            //         }
+            //     }
+            //     // console.log(data);
+            // });
+            // await deletedReview.save();
+            res.send("Done");
+            
+        } catch (error) {
+            res.status(400).json(new validationerror(error.message, 400));
+        }
+       
+        
+    }
+
+    async updateReview(req, res) {
+        // update review and rating
+        try {
+            var newReview = await Review.findOne({ customerId: req.params.userId },{productId: req.params.productId});
+            newReview.review = req.body.review || newReview.review;
+            newReview.rating = req.body.rating || newReview.rating;
+            await newReview.save();
+            res.send("Done");
+        } catch (error) {
+            res.status(400).json(new validationerror(error.message, 400));
+        }
+    }
+
+    async getAllReview(req, res) {
+        try {
+            var allreviews = await Review.find({ customerId: req.params.userId }).populate({
+                 path:'productDetails',
+                 select:'title price'});
+            res.status(200).json({ allreviews})
+        } catch (error) {
+            res.status(400).json(new validationerror(error.message, 400));
+        }
+    }
 };
 
 
