@@ -15,6 +15,7 @@ const WishListController = require('../controller/user/wishListController');
 const CartListController = require('../controller/user/cartListController');
 const cart_2_List = require('../controller/user/cartList_2_Controller');
 const DeliveryPageController = require('../controller/user/deliveryPageController');
+const verificationController = require('../controller/user/verificationController');
 //PRODUCT
 const productAddController = require('../controller/product/productAddController')
 const productEditController = require('../controller/product/productEditController')
@@ -82,7 +83,7 @@ router.post("/user/:userId/deleteDeliveryItem", userById, requireSignin, isAuth,
 //PRODUCT-ADD (only sellers permission)
 router.post("/seller/:userId/product/add", userById, requireSignin, isAuth, restrictTo("seller"), productAddController.addProduct);
 // PRODUCT VIEW 
-router.get("/products/view",userById, requireSignin, isAuth, productViewController.allProducts);
+router.get("/products/view",productViewController.allProducts);
 
 //PRODUCT-EDIT (only sellers permission)
 router.post("/seller/:userId/product/edit", userById, requireSignin, isAuth, restrictTo("seller"), productEditController.editProduct);
@@ -108,7 +109,10 @@ router.get("/user/:userId/product/:productId/review/delete",userById, requireSig
 router.post("/user/:userId/product/:productId/review/update", userById, requireSignin, isAuth, reviewController.updateReview);
 router.get("/user/:userId/review/getAllReview", userById, requireSignin, isAuth, reviewController.getAllReview);
 
+// TEST Verification controller
 
+router.post("/user/verify",verificationController.createUserVerifyToken);
+router.get('/user/sendToken/:token', verificationController.verifyUser);
 
 
 /*********Exports*************/

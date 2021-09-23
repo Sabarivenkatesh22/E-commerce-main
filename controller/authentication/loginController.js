@@ -1,6 +1,7 @@
 const User = require("./../../models/userRole/user")
 const validationerror = require("../../middleware/validationError");
 const cartListController = require("../user/cartListController");
+const Email = require("../../utils/email");
 
 const { v4: uuidv4 } = require('uuid')
 const moment = require("moment")
@@ -26,6 +27,8 @@ class LoginController {
                   iat: moment().unix(),
                   exp: moment(Date.now()).add(14, "days").unix()
               };
+            //    new Email(user, resetURL).sendWelcome();
+            new Email(user).sendWelcome();
 
               var tokesecret = process.env.TOKEN_SECRET;
 

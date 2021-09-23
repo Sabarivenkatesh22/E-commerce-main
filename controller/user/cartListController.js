@@ -13,8 +13,8 @@ class CartListController {
                 customerId: req.params.userId
             });
 
-            //  res.send("Done");
-            res.status(200).json({ CartList });
+             res.send("Done");
+            // res.status(200).json({ CartList });
         } catch (error) {
             res.status(401).json(new validationerror(error.message, 401));
 
@@ -73,7 +73,7 @@ class CartListController {
     }
     async deleteCartList(req, res) {
         try {
-            const delCartList = await Cart.findOneAndUpdate({ customerId: req.params.userId });
+            const deleteCartList = await Cart.findOneAndUpdate({ customerId: req.params.userId });
             var result = req.body.productId;
             var index ;
             result.forEach(e => {
@@ -84,6 +84,7 @@ class CartListController {
                     }
                 }
                 // console.log(data);
+                console.log("from deleteCartList");
             });
             await deleteCartList.save();
             res.send("Done");

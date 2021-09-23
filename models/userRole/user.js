@@ -79,11 +79,15 @@ const userSchema = new Schema(
     verificationToken:{
       type:String
     },
+    confirmEmailToken:{String},
+    // verifySellerToken:{String},
     // passwordResetToken: String,
     passwordResetExpires: Date,
     passwordChangedAt: Date,
     // resetPasswordToken:String,
     token:String,
+    confirmEmailHashedToken: String,
+    // verifySellerHashedToken: String,
   },
    
   {
@@ -122,42 +126,37 @@ const userSchema = new Schema(
 
   
 
-userSchema.methods.createVerificationToken = function () {
-  const verifyToken = crypto.randomBytes(32).toString('hex');
+userSchema.methods.createEmailVerificationToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  this.confirmEmailHashedToken = Hashing.hash(resetToken, resetToken.length);
+  console.log({ resetToken }, this.confirmEmailHashedToken);
 
-  this.verificationToken = crypto
-      .createHash('sha256')
-      .update(resetToken)
-      .digest('hex');
+  // console.log({ verifyToken }, this.verificationToken);
 
-  console.log({ verifyToken }, this.verificationToken);
-
-  return verifyToken;
+  return resetToken;
 };
 // password reset token is Different from verification token
 userSchema.methods.createPasswordResetToken =  function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
-  // const resetToken =  crypto
-  // .createHash('sha256')
-  // .update("thisisTLmode")
-  // .digest('hex');
-
-  // this.passwordResetToken = crypto
-  //     .createHash('sha256')
-  //     .update(resetToken)
-  //     .digest('hex');
-//  const  resetToken = "sabarivenkatesh";
-  // this.passwordResetToken = Hashing.hash(resetToken, resetToken.length);
-  // this.passwordResetToken = resetToken;
-  // this.token = resetToken;
   this.token = Hashing.hash(resetToken, resetToken.length);
   console.log({ resetToken }, this.token);
   // console.log(this.passwordResetToken);
 
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  // this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
 };
+
+// userSchema.methods.createSellerVerificationToken =  function () {
+//   const resetToken = crypto.randomBytes(32).toString('hex');
+//   this.verifySellerHashedToken = Hashing.hash(resetToken, resetToken.length);
+//   console.log({ resetToken }, this.verifySellerHashedToken);
+//   // console.log(this.passwordResetToken);
+
+//   // this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+//   return resetToken;
+// };
 
 // userSchema.virtual('wishListPage', {
 //   ref: 'product',
