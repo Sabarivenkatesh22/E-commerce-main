@@ -3,6 +3,27 @@ const validationerror = require("../../middleware/validationError");
 const Cart = require("../../models/userFeaturesModel/cartModel");
 
 class CartListController {
+    async makeCartList(userId) {
+        try {
+            // req.body -> should have product id 
+            // var userId = req.params.userId;
+            // req.body.customerId = userId;
+
+            const CartList = await Cart.create({
+                customerId: userId
+            });
+
+            //  res.send("Done");
+            return "Done";
+            // res.status(200).json({ CartList });
+        } catch (error) {
+            // res.status(401).json(new validationerror(error.message, 401));
+            return "error";
+
+        }
+
+    }
+
     async createCartList(req, res) {
         try {
             // req.body -> should have product id 

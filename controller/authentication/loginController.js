@@ -28,7 +28,7 @@ class LoginController {
                   exp: moment(Date.now()).add(14, "days").unix()
               };
             //    new Email(user, resetURL).sendWelcome();
-            new Email(user).sendWelcome();
+            // new Email(user).sendWelcome();
 
               var tokesecret = process.env.TOKEN_SECRET;
 
@@ -58,5 +58,5 @@ class LoginController {
 
 }
 
-const loginController = new LoginController()
-module.exports = loginController
+const loginController = new LoginController();
+module.exports = loginController;

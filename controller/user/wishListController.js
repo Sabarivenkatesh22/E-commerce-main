@@ -4,6 +4,27 @@ const Wishlist = require("../../models/userFeaturesModel/wishlistModel");
 
 class WishListController {
     //  when user get the first verification as true we will create a empty wishlist
+    async makeWishList(userId) {
+        try {
+            console.log("from createWishList");
+            // req.body -> should have product id 
+            // var userId = req.params.userId;
+            // req.body.customerId = userId;
+            // data = {
+            //     customerId: req.params.userId
+            // };
+            const newWishList = await Wishlist.create({
+                customerId: userId
+            });
+            return "Done";
+        } catch (error) {
+            return "error";
+
+        }
+
+
+    }
+
     async createWishList(req, res) {
         try {
             console.log("from createWishList");

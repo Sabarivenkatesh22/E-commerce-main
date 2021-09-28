@@ -39,7 +39,10 @@ class RegisterController {
       //   username: username,
       // });
       console.log(user);
-   
+     var resultCartList  = await cartListController.makeCartList(user.userId);
+     var resultWishList  = await wishListController.makeWishList(user.userId);
+     console.log(resultCartList);
+     console.log(resultWishList);
 
     } catch (err) {
       res
@@ -78,7 +81,9 @@ class RegisterController {
 
     const role = req.body.userRole;
     res.status(200).json({ message: "ok" });
-    this.sendVerifyToken(req);
+    // this verification link to be sent to user email 
+     
+    // this.sendVerifyToken(req);
     if (role == "seller") {
       this.verifySeller(req);
     }
@@ -92,8 +97,8 @@ class RegisterController {
 
   // token will be sent to all users for verification
   async sendVerifyToken(req) {
-    const token = user.createVerificationToken();
-    await user.save({ validateBeforeSave: false });
+    const token = User.createVerificationToken();
+    await User.save({ validateBeforeSave: false });
     const checkURL = `${req.protocol}://${req.get(
       "host"
     )}/api/user/verification/${token}`;

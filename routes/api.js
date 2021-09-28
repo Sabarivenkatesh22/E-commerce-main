@@ -24,6 +24,12 @@ const productImageController = require('../controller/product/productImageContro
 const productViewController = require('../controller/product/productViewController')
 const reviewController = require('../controller/product/reviewController')
 
+// RAZORPAY
+const razorPay = require('../utils/razorPay');
+
+// SELLER
+const SellerController = require('../controller/product/sellerController');
+
 /*********Uploader************/
 //PRODUCT IMAGE
 const uploadImageProduct = require('../middleware/uploadImageProduct');
@@ -82,13 +88,15 @@ router.post("/user/:userId/deleteDeliveryItem", userById, requireSignin, isAuth,
 
 //PRODUCT-ADD (only sellers permission)
 router.post("/seller/:userId/product/add", userById, requireSignin, isAuth, restrictTo("seller"), productAddController.addProduct);
+
 // PRODUCT VIEW 
-router.get("/products/view",productViewController.allProducts);
+router.get("/products/view", productViewController.allProducts);
 
 //PRODUCT-EDIT (only sellers permission)
 router.post("/seller/:userId/product/edit", userById, requireSignin, isAuth, restrictTo("seller"), productEditController.editProduct);
 // https://tl-mode-secondary-backend.herokuapp.com/
 // http://127.0.0.1:7000/
+
 // PRODUCT-VIEW
 router.get("/user/product/:productId", productViewController.productView);
 
@@ -104,15 +112,23 @@ router.post("/seller/:userId/product/update/discount", userById, requireSignin, 
 router.post("/seller/:userId/product/image/upload", uploadImageProduct.array('image[]'), productImageController.addImagesProduct);
 
 // REVIEWS
-router.post("/user/:userId/product/:productId/review/add",userById, requireSignin, isAuth,  reviewController.addReview);
-router.get("/user/:userId/product/:productId/review/delete",userById, requireSignin, isAuth,  reviewController.delReview);
+router.post("/user/:userId/product/:productId/review/add", userById, requireSignin, isAuth, reviewController.addReview);
+router.get("/user/:userId/product/:productId/review/delete", userById, requireSignin, isAuth, reviewController.delReview);
 router.post("/user/:userId/product/:productId/review/update", userById, requireSignin, isAuth, reviewController.updateReview);
 router.get("/user/:userId/review/getAllReview", userById, requireSignin, isAuth, reviewController.getAllReview);
 
 // TEST Verification controller
-
-router.post("/user/verify",verificationController.createUserVerifyToken);
+router.post("/user/verify", verificationController.createUserVerifyToken);
 router.get('/user/sendToken/:token', verificationController.verifyUser);
+
+// RAZORPAY
+router.post("/user/:userId/product/:productId/buyProduct", razorPay.sendOrderId);
+router.post("/user/:userId/product/:productId/orderSuccessful", razorPay.orderSuccessful);
+router.post("/user/:userId/product/:productId/orderFailed", razorPay.orderFailed);
+
+// SELLER
+router.get("/seller/:userId/products", restrictTo('seller'), SellerController.sellerProductDisplay);
+
 
 
 /*********Exports*************/
