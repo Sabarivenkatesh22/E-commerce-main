@@ -70,7 +70,7 @@ router.get("/user/:userId/deleteUser", userById, requireSignin, isAuth, userUpda
 
 // WISHLIST 
 router.patch("/user/:userId/updateWishlist", userById, requireSignin, isAuth, WishListController.updateWishList);
-router.get("/user/:userId/getWishlist", userById, requireSignin, isAuth, WishListController.getWishList);
+router.get("/user/:userId/getWishlist",userById, requireSignin, isAuth, WishListController.getWishList);
 router.post("/user/:userId/createWishlist", userById, requireSignin, isAuth, WishListController.createWishList);
 router.post("/user/:userId/deleteWishlist", userById, requireSignin, isAuth, WishListController.deleteWishList);
 
@@ -81,7 +81,7 @@ router.post("/user/:userId/createCartlist", userById, requireSignin, isAuth, Car
 router.post("/user/:userId/deleteCartlist", userById, requireSignin, isAuth, CartListController.deleteCartList);
 
 // DELIVERY PAGE 
-router.post("/user/:userId/updateDeliveryItem", userById, requireSignin, isAuth, DeliveryPageController.updateDeliveryItem);
+router.post("/user/:userId/product/:productId/updateDeliveryItem", userById, requireSignin, isAuth, DeliveryPageController.updateDeliveryItem);
 router.get("/user/:userId/getDeliveryPage", userById, requireSignin, isAuth, DeliveryPageController.getDeliveryPage);
 router.post("/user/:userId/createDeliveryPage", userById, requireSignin, isAuth, DeliveryPageController.createDeliveryPage);
 router.post("/user/:userId/deleteDeliveryItem", userById, requireSignin, isAuth, DeliveryPageController.deleteDeliveryItem);

@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const api = require('./routes/api');
 const mongoose = require('./connection/mongodb')
+const globalErrorHandler = require('./controller/errorController');
 const dotenv = require('dotenv')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -29,6 +30,8 @@ app.use(express.static(`${__dirname}/public`));
 
 /************APIs*******************/
 app.use('/api', api)
+
+app.use(globalErrorHandler);
 
 
 /************SERVER*****************/

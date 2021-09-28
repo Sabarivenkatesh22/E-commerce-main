@@ -7,7 +7,7 @@ const { type } = require("os");
 
 class ForgetPasswordController{
 
-    async forgetPassword (req, res) {
+    async forgetPassword (req, res,next) {
     // 1) Get user based on POSTed email
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
@@ -27,7 +27,7 @@ class ForgetPasswordController{
 };
 
 // in the reset password token api we have to use token parameter 
- async resetPassword  (req, res)  {
+ async resetPassword  (req, res,next)  {
     // 1) Get user based on the token
     // const hashedToken = crypto
     //   .createHash('sha256')
@@ -55,7 +55,7 @@ class ForgetPasswordController{
     // 2) If token has not expired, and there is user, set the new password
     if (!user) {
     //   return next(new validationerror('Token is invalid or has expired', 400));
-    res.status(400).json(new validationerror("Process Failed, Check email and password", 400));
+    return next(new validationerror("Process Failed, Check email and password", 400));
     }
     user.password = req.body.password;
     user.passwordResetToken = undefined;

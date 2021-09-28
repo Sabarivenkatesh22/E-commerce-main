@@ -5,7 +5,7 @@ const Product = require("../../models/product/product");
 
 class CartList 
 {
-    async createCartList(req,res)
+    async createCartList(req,res,next)
     {
         try {
             // req.body -> should have product id 
@@ -18,13 +18,13 @@ class CartList
 
  res.send("Done");
         } catch (error) {
-            res.status(401).json(new validationerror(error.message, 401));
+           return next(new validationerror(error.message, 401));
 
         }
        
    }
 
-   async updateCartList(req, res) {
+   async updateCartList(req, res,next) {
        try {
            // req.body -> should have product id 
            // req.body.customerId = userId;
@@ -66,7 +66,7 @@ class CartList
 
           res.send("done");
        } catch (err) {
-           res.status(401).json(new validationerror(err, 401));
+          return next(new validationerror(err, 401));
        }
    }
 
@@ -74,13 +74,13 @@ class CartList
 
 //       const CartList = await Cart.find({ customerId: req.params.userId}).populate('productDetails');
 
-//       if(!CartList) res.status(401).json(new validationerror("Process Failed, not a valid ID", 401));
+//       if(!CartList)return next(new validationerror("Process Failed, not a valid ID", 401));
 
 //       else res.status(200).json({CartList})
 
 //    };
 
-async getCartList(req,res) {
+async getCartList(req,res,next) {
 
     try {
         const product = Product.find({cartListUserId:req.params.userId});
@@ -91,7 +91,7 @@ async getCartList(req,res) {
     // product.cartListUserId.includes(req.params.userId);
     res.status(200).json({newProduct})
     } catch (error) {
-        res.status(401).json(new validationerror(error.message, 401));
+       return next(new validationerror(error.message, 401));
     }
     
     // const CartList = await Cart.find({ customerId: req.params.userId}).populate('productDetails');

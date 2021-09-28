@@ -10,13 +10,13 @@ const jwt = require("jsonwebtoken");
 
 class LoginController {
 
-  async userLogin(req, res){
+  async userLogin(req, res,next){
 
       let email = req.body.email;
       let password = req.body.password;
       let user = await User.findOne({ email: email });
       if (!user) {
-          res.status(400).json(new validationerror("Process Failed, Check email and password", 400));
+          return next(new validationerror("Process Failed, Check email and password", 400));
       } else {
           let userId = user.userId;
           if (bcrypt.compareSync(password, user.password)) {
@@ -43,11 +43,11 @@ class LoginController {
                   return res.status(200).json({ message:"ok", token:token, firstname:user.firstname, lastname:user.lastname, userId:user.userId, email:user.email, role:user.rolee, verified:user.verified, manualVerification:user.manualVerification});
               }
               else {
-                  return res.status(400).json(new validationerror("Process Failed, Undefined Role", 400));
+                  return next(new validationerror("Process Failed, Undefined Role", 400));
               }
 
           } else {
-              res.status(400).json(new validationerror("Process Failed, Check email and password", 400));
+             return next(new validationerror("Process Failed, Check email and password", 400));
           }
 
           

@@ -1,12 +1,3 @@
-// function ValidationError(message, status) {
-//     this.message = message;
-//     this.status = status;
-//     this.error = true;
-//     this.ok = false;
-// }
-
-
-
 class validationerror extends Error {
     constructor(message, statusCode) {
         super(message);

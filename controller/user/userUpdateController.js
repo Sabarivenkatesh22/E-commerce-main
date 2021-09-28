@@ -6,7 +6,7 @@ const moment = require("moment")
 
 class UserUpdateController {
 
-    async editUserDetails(req, res){
+    async editUserDetails(req, res,next){
 
         var userId = req.params.userId;
 
@@ -30,7 +30,7 @@ class UserUpdateController {
             return res.status(200).json({"message":"ok"})
 
         } else {
-            res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+           return next(new validationerror("Process Failed, Unauthorized", 401));
         }
 
     };

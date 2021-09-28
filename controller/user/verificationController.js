@@ -7,7 +7,7 @@ const { type } = require("os");
 const Email = require("../../utils/email");
 
 class VerificationController {
-  async createUserVerifyToken(req, res) {
+  async createUserVerifyToken(req, res,next) {
     // 1) Get user based on POSTed email
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
@@ -31,7 +31,7 @@ class VerificationController {
   }
 
   // in the reset password token api we have to use token parameter
-  async verifyUser(req, res) {
+  async verifyUser(req, res,next) {
     var token = req.params.token.trim();
     const hashedToken = Hashing.hash(token, token.length);
     const user = await User.findOne({
@@ -46,9 +46,7 @@ class VerificationController {
     // 2) If token has not expired, and there is user, set the new password
     if (!user) {
       //   return next(new validationerror('Token is invalid or has expired', 400));
-      res
-        .status(400)
-        .json(
+      return next(
           new validationerror("Process Failed, Check email and password", 400)
         );
     }
@@ -100,7 +98,7 @@ class VerificationController {
   //     // 2) If token has not expired, and there is user, set the new password
   //     if (!user) {
   //     //   return next(new validationerror('Token is invalid or has expired', 400));
-  //     res.status(400).json(new validationerror("Process Failed, Check email and password", 400));
+  //    return next(new validationerror("Process Failed, Check email and password", 400));
   //     }
   //     user.verified = true;
   //     await user.save({ validateBeforeSave: true });

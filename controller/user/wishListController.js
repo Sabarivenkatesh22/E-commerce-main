@@ -1,5 +1,6 @@
 const User = require("../../models/userRole/user");
-const validationerror = require("../../middleware/validationError");
+// const validationerror = require("../../middleware/validationError");
+const validationerror = require('../../middleware/validationError_2');
 const Wishlist = require("../../models/userFeaturesModel/wishlistModel");
 
 class WishListController {
@@ -25,7 +26,7 @@ class WishListController {
 
     }
 
-    async createWishList(req, res) {
+    async createWishList(req, res,next) {
         try {
             console.log("from createWishList");
             // req.body -> should have product id 
@@ -39,14 +40,14 @@ class WishListController {
             });
             res.send("Done");
         } catch (error) {
-            res.status(401).json(new validationerror(error.message, 401));
+           return next(new validationerror(error.message, 401));
 
         }
 
 
     }
 
-    async updateWishList(req, res) {
+    async updateWishList(req, res,next) {
         try {
 
             // req.body -> should have product id 
@@ -87,21 +88,26 @@ class WishListController {
             });
             console.log(oldWishList);
         } catch (err) {
-            res.status(401).json(new validationerror(err.message, 401));
+           return next(new validationerror(err.message, 401));
         }
     }
 
-    async getWishList(req, res) {
+    async getWishList(req, res,next) {
 
         const newWishList = await Wishlist.find({ customerId: req.params.userId }).populate('productDetails');
 
-        if (!newWishList) res.status(401).json(new validationerror("Process Failed, not a valid ID", 401));
-
+        if (!newWishList)return next(new validationerror("Process Failed, not a valid ID", 401));
+        // if (!newWishList) return next(
+        //     new validationerror(
+        //       'process failed, not a valid ID',
+        //       400
+        //     )
+        //   );
         else res.status(200).json({ newWishList })
 
     }
 
-    async deleteWishList(req, res) {
+    async deleteWishList(req, res,next) {
         try {
             var result = req.body.productId;
             const newWishList = await Wishlist.findOne({ customerId: req.params.userId });
@@ -127,7 +133,7 @@ class WishListController {
             await newWishList.save();
             res.send("Done");
         } catch (error) {
-            res.status(401).json(new validationerror(error.message, 401));
+           return next(new validationerror(error.message, 401));
         }
 
 

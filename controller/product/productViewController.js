@@ -5,7 +5,7 @@ const validationerror = require("../../middleware/validationError");
 
 class ProductViewController {
 
-    async productView(req, res) {
+    async productView(req, res,next) {
         try {
             // make sure that two populate works
             const product = await Product.findOne({ productId: req.params.productId }).populate('reviews')
@@ -27,12 +27,12 @@ class ProductViewController {
                 // ]
             })
         } catch (error) {
-            res.status(400).json(new validationerror(error.message, 400));
+           return next(new validationerror(error.message, 400));
         }
 
     }
 
-    async allProducts(req, res) {
+    async allProducts(req, res,next) {
         try {
             const product = await Product.find().populate({
                 path: "discount",
@@ -45,7 +45,7 @@ class ProductViewController {
 
             });
         } catch (err) {
-            res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+            return next(new validationerror("Process Failed, Unauthorized", 401));
         }
     }
 

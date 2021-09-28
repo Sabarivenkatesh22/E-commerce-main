@@ -17,14 +17,14 @@ class CartListController {
             return "Done";
             // res.status(200).json({ CartList });
         } catch (error) {
-            // res.status(401).json(new validationerror(error.message, 401));
+            //return next(new validationerror(error.message, 401));
             return "error";
 
         }
 
     }
 
-    async createCartList(req, res) {
+    async createCartList(req, res,next) {
         try {
             // req.body -> should have product id 
             // var userId = req.params.userId;
@@ -37,13 +37,13 @@ class CartListController {
              res.send("Done");
             // res.status(200).json({ CartList });
         } catch (error) {
-            res.status(401).json(new validationerror(error.message, 401));
+           return next(new validationerror(error.message, 401));
 
         }
 
     }
 
-    async updateCartList(req, res) {
+    async updateCartList(req, res,next) {
         try {
             // req.body -> should have product id 
             // req.body.customerId = userId;
@@ -79,20 +79,20 @@ class CartListController {
                 }
             });
         } catch (err) {
-            res.status(401).json(new validationerror(err.message, 401));
+           return next(new validationerror(err.message, 401));
         }
     }
 
-    async getCartList(req, res) {
+    async getCartList(req, res,next) {
 
         const CartList = await Cart.find({ customerId: req.params.userId }).populate('productDetails');
 
-        if (!CartList) res.status(401).json(new validationerror("Process Failed, not a valid ID", 401));
+        if (!CartList)return next(new validationerror("Process Failed, not a valid ID", 401));
 
         else res.status(200).json({ CartList })
 
     }
-    async deleteCartList(req, res) {
+    async deleteCartList(req, res,next) {
         try {
             const deleteCartList = await Cart.findOneAndUpdate({ customerId: req.params.userId });
             var result = req.body.productId;
@@ -110,7 +110,7 @@ class CartListController {
             await deleteCartList.save();
             res.send("Done");
         } catch (error) {
-            res.status(401).json(new validationerror(error.message, 401));
+           return next(new validationerror(error.message, 401));
         }
 
 

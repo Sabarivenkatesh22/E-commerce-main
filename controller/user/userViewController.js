@@ -6,14 +6,14 @@ const moment = require("moment")
 
 class UserViewController {
 
-  async userDetails(req, res){
+  async userDetails(req, res,next){
       var userId = req.params.userId;
 
       if(userId == req.auth.userId){
           let user = await User.findOne({ userId: userId});
 
           if (user == null) {
-              res.status(400).json(new validationerror("Process Failed, User not found", 400));
+             return next(new validationerror("Process Failed, User not found", 400));
           }
 
           if (user.userRole == "buyer") {
@@ -52,11 +52,11 @@ class UserViewController {
                                             manualVerification:user.manualVerification});
           }
           else {
-              return res.status(400).json(new validationerror("Process Failed, Undefined Role", 400));
+              return next(new validationerror("Process Failed, Undefined Role", 400));
           }
 
       } else {
-          res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+         return next(new validationerror("Process Failed, Unauthorized", 401));
       }
   }
 
@@ -70,11 +70,11 @@ class UserViewController {
 
 //     });
 // } catch (err) {
-//     res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+//    return next(new validationerror("Process Failed, Unauthorized", 401));
 // }
 //   }
 
-async getAllUsers(req, res) {
+async getAllUsers(req, res,next) {
     try {
         const allUsers = await User.find();
     res.status(200).json({
@@ -83,7 +83,7 @@ async getAllUsers(req, res) {
         allUsers
     });
     } catch (error) {
-        res.status(401).json(new validationerror(error.message, 401));
+       return next(new validationerror(error.message, 401));
     }
     
 }

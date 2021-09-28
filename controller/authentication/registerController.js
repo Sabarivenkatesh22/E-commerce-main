@@ -12,7 +12,7 @@ const jwt = require("jsonwebtoken");
 
 class RegisterController {
 
-  async registerUser(req, res) {
+  async registerUser(req, res, next) {
     try {
 
      
@@ -41,13 +41,13 @@ class RegisterController {
       console.log(user);
      var resultCartList  = await cartListController.makeCartList(user.userId);
      var resultWishList  = await wishListController.makeWishList(user.userId);
+     var resultDeliveryPage  = await deliveryPageController.makeDeliveryPage(user.userId);
      console.log(resultCartList);
      console.log(resultWishList);
+     console.log(resultDeliveryPage);
 
     } catch (err) {
-      res
-        .status(400)
-        .json(
+      return next(
           new validationerror(
             err.message,
             400
@@ -116,7 +116,7 @@ class RegisterController {
       passwordResetToken: hashedToken,
     });
     if (!user) {
-      (new validationerror("Token is invalid or has expired", 400));
+     return next (new validationerror("Token is invalid or has expired", 400));
     }
     else {
       // making first verification true for every user after checking the token
@@ -131,7 +131,7 @@ class RegisterController {
   async verifySeller(req, res) {
 
     const user = await User.findOne({ userId: req.body.userId });
-    if (!user) (new validationerror("User is not found", 400));
+    if (!user) return next(new validationerror("User is not found", 400));
     const seller = await sellerVerifyModel.create({
       contactNumber: req.body.contactNumber,
       addressId: req.body.addressId,

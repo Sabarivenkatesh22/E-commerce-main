@@ -10,7 +10,7 @@ const moment = require("moment")
 
 class ProductEditController {
 
-    async updateQuantityProduct(req, res){
+    async updateQuantityProduct(req, res,next) {
 
         var userId = req.params.userId;
         var productId = req.body.productId;
@@ -18,12 +18,12 @@ class ProductEditController {
         if(userId == req.auth.userId){
             let user = await User.findOne({ userId: userId});
             if (user == null) {
-                res.status(400).json(new validationerror("Process Failed, User not found", 400));
+               return next(new validationerror("Process Failed, User not found", 400));
             }
 
             let productUpdate = await Product.findOne({ userId: userId, productId: productId});
             if (productUpdate == null) {
-                res.status(400).json(new validationerror("Process Failed, Product not found", 400));
+               return next(new validationerror("Process Failed, Product not found", 400));
             }
 
             let quantity = req.body.quantity || productEdit.quantity;
@@ -35,12 +35,12 @@ class ProductEditController {
             return res.status(200).json({message:"ok"})
 
         } else {
-            res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+           return next(new validationerror("Process Failed, Unauthorized", 401));
         }
 
     }
 
-    async updatePriceProduct(req, res){
+    async updatePriceProduct(req, res,next){
 
         var userId = req.params.userId;
         var productId = req.body.productId;
@@ -48,12 +48,12 @@ class ProductEditController {
         if(userId == req.auth.userId){
             let user = await User.findOne({ userId: userId});
             if (user == null) {
-                res.status(400).json(new validationerror("Process Failed, User not found", 400));
+               return next(new validationerror("Process Failed, User not found", 400));
             }
 
             let productUpdate = await Product.findOne({ userId: userId, productId: productId});
             if (productUpdate == null) {
-                res.status(400).json(new validationerror("Process Failed, Product not found", 400));
+               return next(new validationerror("Process Failed, Product not found", 400));
             }
 
             let price = req.body.price || productEdit.price;
@@ -65,12 +65,12 @@ class ProductEditController {
             return res.status(200).json({message:"ok"})
 
         } else {
-            res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+           return next(new validationerror("Process Failed, Unauthorized", 401));
         }
 
     }
 
-    async updateColourProduct(req, res){
+    async updateColourProduct(req, res,next){
 
         var userId = req.params.userId;
         var productId = req.body.productId;
@@ -78,12 +78,12 @@ class ProductEditController {
         if(userId == req.auth.userId){
             let user = await User.findOne({ userId: userId});
             if (user == null) {
-                res.status(400).json(new validationerror("Process Failed, User not found", 400));
+               return next(new validationerror("Process Failed, User not found", 400));
             }
 
             let productUpdate = await Product.findOne({ userId: userId, productId: productId});
             if (productUpdate == null) {
-                res.status(400).json(new validationerror("Process Failed, Product not found", 400));
+               return next(new validationerror("Process Failed, Product not found", 400));
             }
 
             var result = req.body.colour;
@@ -106,12 +106,12 @@ class ProductEditController {
             return res.status(200).json({message:"ok"})
 
         } else {
-            res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+           return next(new validationerror("Process Failed, Unauthorized", 401));
         }
 
     }
 
-    async addPointsProduct(req, res){
+    async addPointsProduct(req, res,next){
 
         var userId = req.params.userId;
         var productId = req.body.productId;
@@ -119,12 +119,12 @@ class ProductEditController {
         if(userId == req.auth.userId){
             let user = await User.findOne({ userId: userId});
             if (user == null) {
-                res.status(400).json(new validationerror("Process Failed, User not found", 400));
+               return next(new validationerror("Process Failed, User not found", 400));
             }
 
             let product = await Product.findOne({ userId: userId, productId: productId});
             if (product == null) {
-                res.status(400).json(new validationerror("Process Failed, Product not found", 400));
+               return next(new validationerror("Process Failed, Product not found", 400));
             }
 
             let points = req.body.points;
@@ -140,12 +140,12 @@ class ProductEditController {
             return res.status(200).json({"message":"ok"})
 
         } else {
-            res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+            return next(new validationerror("Process Failed, Unauthorized", 401));
         }
 
     }
 
-    async updatePointsProduct(req, res){
+    async updatePointsProduct(req, res,next){
 
         var userId = req.params.userId;
         var productId = req.body.productId;
@@ -153,17 +153,17 @@ class ProductEditController {
         if(userId == req.auth.userId){
             let user = await User.findOne({ userId: userId});
             if (user == null) {
-                res.status(400).json(new validationerror("Process Failed, User not found", 400));
+                return next(new validationerror("Process Failed, User not found", 400));
             }
 
             let product = await Product.findOne({ userId: userId, productId: productId});
             if (product == null) {
-                res.status(400).json(new validationerror("Process Failed, Product not found", 400));
+                return next(new validationerror("Process Failed, Product not found", 400));
             }
 
             let productUpdate = await ProductPoints.findOne({userId:userId, productId:productId});
             if (productUpdate == null) {
-                res.status(400).json(new validationerror("Process Failed, Product points not found", 400));
+                return next(new validationerror("Process Failed, Product points not found", 400));
             }
 
             let points = req.body.points || productUpdate.points;
@@ -175,12 +175,12 @@ class ProductEditController {
             return res.status(200).json({"message":"ok"})
 
         } else {
-            res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+            return next(new validationerror("Process Failed, Unauthorized", 401));
         }
 
     }
 
-    async addDiscountProduct(req, res){
+    async addDiscountProduct(req, res,next){
 
         var userId = req.params.userId;
         var productId = req.body.productId;
@@ -188,12 +188,12 @@ class ProductEditController {
         if(userId == req.auth.userId){
             let user = await User.findOne({ userId: userId});
             if (user == null) {
-                res.status(400).json(new validationerror("Process Failed, User not found", 400));
+                return next(new validationerror("Process Failed, User not found", 400));
             }
 
             let product = await Product.findOne({ userId: userId, productId: productId});
             if (product == null) {
-                res.status(400).json(new validationerror("Process Failed, Product not found", 400));
+                return next(new validationerror("Process Failed, Product not found", 400));
             }
 
             let discount = req.body.discount;
@@ -209,12 +209,12 @@ class ProductEditController {
             return res.status(200).json({"message":"ok"})
 
         } else {
-            res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+            return next (new validationerror("Process Failed, Unauthorized", 401));
         }
 
     }
 
-    async updateDiscountProduct(req, res){
+    async updateDiscountProduct(req, res,next){
 
         var userId = req.params.userId;
         var productId = req.body.productId;
@@ -222,17 +222,17 @@ class ProductEditController {
         if(userId == req.auth.userId){
             let user = await User.findOne({ userId: userId});
             if (user == null) {
-                res.status(400).json(new validationerror("Process Failed, User not found", 400));
+               return next(new validationerror("Process Failed, User not found", 400));
             }
 
             let product = await Product.findOne({ userId: userId, productId: productId});
             if (product == null) {
-                res.status(400).json(new validationerror("Process Failed, Product not found", 400));
+               return next(new validationerror("Process Failed, Product not found", 400));
             }
 
             let productUpdate = await ProductDiscount.findOne({userId:userId, productId:productId});
             if (productUpdate == null) {
-                res.status(400).json(new validationerror("Process Failed, Product discount not found", 400));
+               return next(new validationerror("Process Failed, Product discount not found", 400));
             }
 
             let discount = req.body.discount || productUpdate.discount;
@@ -244,7 +244,7 @@ class ProductEditController {
             return res.status(200).json({"message":"ok"})
 
         } else {
-            res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+            return next(new validationerror("Process Failed, Unauthorized", 401));
         }
 
     }

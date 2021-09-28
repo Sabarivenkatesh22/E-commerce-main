@@ -7,28 +7,28 @@ require('dotenv').config({ path: '.env' });
 exports.requireSignin = expressJwt({
   secret: process.env.TOKEN_SECRET,
   algorithms: ['HS256'],
-  userProperty: 'auth' }), (req, res) => {
-    return res.status(403).json({ error: "Not Signed IN" })
+  userProperty: 'auth' }), (req, res,next) => {
+    return next(new validationerror('Not Signed In', 401));
   };
 
 exports.isAuth = (req, res, next) => {
   let user = req.profile && req.auth && req.profile.userId == req.auth.userId;
   if(!user) {
-    return res.status(403).json({
-      error: "Access denied!"
-    });
+    return next(new validationerror('Access denied', 401));
   }
   next();
 }
 
 exports.restrictTo = (...roles) => {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     // roles ['admin', 'lead-guide']. role='user'
-    const user = User.findOne({userId: req.params.Id});
+    const user = await User.findOne({userId: req.params.userId});
+    console.log("from restrictTo");
+    console.log(user);
     if (!roles.includes(user.userRole)) {
-      (
-        new validationerror('You do not have permission to perform this action', 403)
-      );
+      
+       return next(new validationerror('You do not have permission to perform this action', 403));
+      
     }
 
     next();

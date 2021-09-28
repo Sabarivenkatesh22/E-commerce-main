@@ -5,7 +5,7 @@ const validationerror = require("../../middleware/validationError");
 
 class SellerController {
 
-    async sellerProductDisplay(req, res) {
+    async sellerProductDisplay(req, res,next) {
         try {
             // make sure that two populate works
             const sellerProductView = await Product.find({userId: req.params.userId}).populate({
@@ -27,7 +27,7 @@ class SellerController {
                 // ]
             })
         } catch (error) {
-            res.status(400).json(new validationerror(error.message, 400));
+           return next(new validationerror(error.message, 400));
         }
 
     }
@@ -45,7 +45,7 @@ class SellerController {
 
     //         });
     //     } catch (err) {
-    //         res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+    //        return next(new validationerror("Process Failed, Unauthorized", 401));
     //     }
     // }
 

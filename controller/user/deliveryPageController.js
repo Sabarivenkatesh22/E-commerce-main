@@ -6,25 +6,24 @@ const product = require("../../models/product/product");
 class DeliveryPageController {
     //  create delivery page when user purchases the product
 
-    async createDeliveryPage(req,res) {
-
+    async makeDeliveryPage(userId) {
         try {
             // data = {
             //     customerId: req.params.userId
             // };
             const deliveryPage = await DeliveryPage.create({
-                customerId: req.params.userId
+                customerId: userId,
             });
             // res.send(deliveryPage);
-            
-            res.send("Done");
+
+            return "Done";
         } catch (error) {
-            res.status(401).json(new validationerror(error.message, 401));
+            return "error";
         }
-        // req.body -> should have product id 
+        // req.body -> should have product id
         // var userId = req.params.userId;
         // req.body.customerId = userId;
-       
+
         // this.getDeliveryPage(req.params.userId, res);
         // res.status(200).json({
         //     status:'success',
@@ -33,91 +32,163 @@ class DeliveryPageController {
         //         deliveryPage
         //     }
         // });
-     
-
     }
-    //   updating only the status of the pacakge 
-
-    async updateDeliveryItem(req, res) {
+    async createDeliveryPage(req, res,next) {
         try {
-            // req.body -> should have product id 
+            // data = {
+            //     customerId: req.params.userId
+            // };
+            const deliveryPage = await DeliveryPage.create({
+                customerId: req.params.userId,
+            });
+            // res.send(deliveryPage);
+
+            res.send("Done");
+        } catch (error) {
+           return next(new validationerror(error.message, 401));
+        }
+        // req.body -> should have product id
+        // var userId = req.params.userId;
+        // req.body.customerId = userId;
+
+        // this.getDeliveryPage(req.params.userId, res);
+        // res.status(200).json({
+        //     status:'success',
+        //     results: deliveryPage.length,
+        //     data:{
+        //         deliveryPage
+        //     }
+        // });
+    }
+    //   updating only the status of the pacakge
+
+    async manualUpdateDeliveryItem(data) {
+        try {
+            // req.body -> should have product id
             // req.body.customerId = userId;
             // data = {
             //     productId: req.body.productId,
             //     customerId: userId
             // };
-            const deliveryPage = await DeliveryPage.findOneAndUpdate({ customerId: req.params.userId }, req.body.productId, {
-                new: true,
-            });
+            const deliveryPage = await DeliveryPage.findOneAndUpdate(
+                { customerId: data.userId },
+                {
+                    productId: data.productId,
+                    status: data.status,
+                },
+                {
+                    new: true,
+                }
+            );
 
             const statusOfProduct = deliveryPage.status;
-            
+
+            // res.status(200).json({
+            //     status: 'success',
+            //     results: deliveryPage.length,
+            //     data: {
+            //         deliveryPage
+            //     }
+            // });
+
+            const deliveredProduct = await product.findOne(req.body.productId);
+            if (statusOfProduct == "processing") {
+                deliveredProduct.sold = deliveredProduct.sold + 1;
+                deliveredProduct.quantity = deliveredProduct.quantity - 1;
+            }
+            if (statusOfProduct == "cancelled") {
+                deliveredProduct.sold = deliveredProduct.sold - 1;
+                deliveredProduct.quantity = deliveredProduct.quantity + 1;
+            }
+            // add points to userModel if the status is delivered
+            await deliveredProduct.save();
+            return "Done";
+        } catch (err) {
+            //return next(new validationerror(err, 401));
+            return "error";
+        }
+    }
+    async updateDeliveryItem(req, res,next) {
+        try {
+            // req.body -> should have product id
+            // req.body.customerId = userId;
+            // data = {
+            //     productId: req.body.productId,
+            //     customerId: userId
+            // };
+            const deliveryPage = await DeliveryPage.findOne(
+                { customerId: req.params.userId , productId: req.params.productId},
+    
+            );
+            deliveryPage.status = req.body.status;
+            await deliveryPage.save();
+            const statusOfProduct = deliveryPage.status;
+
             res.status(200).json({
-                status: 'success',
+                status: "success",
                 results: deliveryPage.length,
                 data: {
-                    deliveryPage
-                }
+                    deliveryPage,
+                },
             });
 
             const deliveredProduct = await product.findOne(req.body.productId);
-            if(statusOfProduct == "processing"){
-                deliveredProduct.sold = deliveredProduct.sold + 1 ;
-                deliveredProduct.quantity = deliveredProduct.quantity - 1 ;
+            if (statusOfProduct == "processing") {
+                deliveredProduct.sold = deliveredProduct.sold + 1;
+                deliveredProduct.quantity = deliveredProduct.quantity - 1;
             }
-            if(statusOfProduct == "cancelled"){
-                deliveredProduct.sold = deliveredProduct.sold - 1 ;
-                deliveredProduct.quantity = deliveredProduct.quantity + 1 ;
+            if (statusOfProduct == "cancelled") {
+                deliveredProduct.sold = deliveredProduct.sold - 1;
+                deliveredProduct.quantity = deliveredProduct.quantity + 1;
             }
             // add points to userModel if the status is delivered
             await deliveredProduct.save();
         } catch (err) {
-            res.status(401).json(new validationerror(err, 401));
+           return next(new validationerror(err, 401));
         }
     }
 
-    async getDeliveryPage(req, res) {
+    async getDeliveryPage(req, res,next) {
+        const deliveryPage = await DeliveryPage.find({
+            customerId: req.params.userId,
+        }).populate("productDetails");
 
-        const deliveryPage = await DeliveryPage.find({ customerId: req.params.userId }).populate('productDetails');
-
-        if (!deliveryPage) res.status(401).json(new validationerror("Process Failed, not a valid ID", 401));
-
-        else res.status(200).json({
-            status: 'success',
-            results: deliveryPage.length,
-            data: {
-                deliveryPage
-            }
-        });
-
+        if (!deliveryPage)
+            res
+                .status(401)
+                .json(new validationerror("Process Failed, not a valid ID", 401));
+        else
+            res.status(200).json({
+                status: "success",
+                results: deliveryPage.length,
+                data: {
+                    deliveryPage,
+                },
+            });
     }
-    async deleteDeliveryItem(req, res) {
+    async deleteDeliveryItem(req, res,next) {
         try {
-            const delDelivery = await DeliveryPage.findOneAndUpdate({ customerId: req.params.userId });
-                var result = req.body.productId;
-                var index ;
-                result.forEach(e => {
-                    if (delDelivery.productId.includes(e)) {
-                        index =delDelivery.productId.indexOf(e);
-                        if (index > -1) {
-                            delDelivery.productId.splice(index, 1);
-                        }
+            const delDelivery = await DeliveryPage.findOneAndUpdate({
+                customerId: req.params.userId,
+            });
+            var result = req.body.productId;
+            var index;
+            result.forEach((e) => {
+                if (delDelivery.productId.includes(e)) {
+                    index = delDelivery.productId.indexOf(e);
+                    if (index > -1) {
+                        delDelivery.productId.splice(index, 1);
                     }
-                    // console.log(data);
-                });
-                await delDelivery.save();
-                res.send("Done");
+                }
+                // console.log(data);
+            });
+            await delDelivery.save();
+            res.send("Done");
         } catch (error) {
-            res.status(401).json(new validationerror(error.message, 401));
+           return next(new validationerror(error.message, 401));
         }
-        
-
-
     }
-
-
 }
-
 
 const deliveryPageController = new DeliveryPageController();
 module.exports = deliveryPageController;

@@ -8,7 +8,7 @@ const moment = require("moment")
 
 class ProductImageController {
 
-    async addImagesProduct(req, res){
+    async addImagesProduct(req, res,next) {
 
         var userId = req.params.userId;
         var productId = req.body.productId;
@@ -17,12 +17,12 @@ class ProductImageController {
 
             let user = await User.findOne({ userId: userId});
             if (user == null) {
-                res.status(400).json(new validationerror("Process Failed, User not found", 400));
+                return next (new validationerror("Process Failed, User not found", 400));
             }
 
             let product = await Product.findOne({productId:productId, userId:userId});
             if (product == null) {
-                res.status(400).json(new validationerror("Process Failed, Product not found", 400));
+                return next(new validationerror("Process Failed, Product not found", 400));
             }
 
             let productUpdate = new productImage({
@@ -49,16 +49,16 @@ class ProductImageController {
             res.status(200).json({message:"ok"});
         }
         else {
-            res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+            return next(new validationerror("Process Failed, Unauthorized", 401));
         }
 
     }
 
-    async updateImagesProduct(req, res){
+    async updateImagesProduct(req, res,next) {
 
     }
 
-    async viewImagesProduct(req, res){
+    async viewImagesProduct(req, res,next){
 
         if(userId == req.auth.userId){
 
@@ -66,7 +66,7 @@ class ProductImageController {
 
             let product = await Product.findOne({productId:productId});
             if (product == null) {
-                res.status(400).json(new validationerror("Process Failed, Product not found", 400));
+                return next(new validationerror("Process Failed, Product not found", 400));
             }
 
             let productImage = await ProductImages.findOne({
@@ -74,13 +74,13 @@ class ProductImageController {
             });
 
             if(productImage == null){
-                res.status(400).json(new validationerror("Process Failed, Image not found.", 400));
+                return next(new validationerror("Process Failed, Image not found.", 400));
             }
 
             res.status(200).json({productId:productImage.productId, path:productImage.images });
 
         } else {
-            res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+            return next(new validationerror("Process Failed, Unauthorized", 401));
         }
 
     }

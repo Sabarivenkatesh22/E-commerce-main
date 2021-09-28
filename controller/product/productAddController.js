@@ -7,7 +7,7 @@ const moment = require("moment")
 
 class ProductAddController {
 
-    async addProduct(req, res){
+    async addProduct(req, res,next){
 
         // console.log("from product add controller");
         var userId = req.params.userId;
@@ -15,7 +15,7 @@ class ProductAddController {
         if(userId == req.auth.userId){
             let user = await User.findOne({ userId: userId});
             if (user == null) {
-                res.status(400).json(new validationerror("Process Failed, User not found", 400));
+                return next (new validationerror("Process Failed, User not found", 400));
             }
             
             let title = req.body.title;
@@ -42,7 +42,7 @@ class ProductAddController {
             return res.status(200).json({"message":"ok"})
 
         } else {
-            res.status(401).json(new validationerror("Process Failed, Unauthorized", 401));
+            return next(new validationerror("Process Failed, Unauthorized", 401));
         }
 
     }
