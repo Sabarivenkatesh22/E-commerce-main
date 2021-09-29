@@ -20,7 +20,7 @@ class RazorPay {
 
         console.log(req.body);
         var options = {
-            amount: 500 * 100,  // amount in the smallest currency unit
+            amount: req.body.price * 100,  // amount in the smallest currency unit
             currency: "INR",
             receipt: "order_rcptid_11"
         };

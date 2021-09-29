@@ -74,6 +74,7 @@ module.exports = (err, req, res, next) => {
     // console.log(err.inner['name']);
     console.log("from production");
     let error = { ...err };
+    // console.log(err.message);
     if(err.inner){
       error.name = err.inner['name'] ? err.inner['name'] : error.name;
     }
