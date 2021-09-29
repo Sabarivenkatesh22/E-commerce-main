@@ -6,7 +6,7 @@ exports.userById = (req, res, next) => {
   let user = User.findOne({ userId: userId }).exec((err, user) => {
     if(err || !user) {
       return next(
-        new validationError('User not found',400)
+        new validationerror('User not found',400)
       );
     }
     req.profile = user;

@@ -54,7 +54,8 @@ const sendErrorProd = (err, res) => {
     // 2) Send generic message
     res.status(500).json({
       status: 'error',
-      message: 'Something went very wrong!'
+      message: 'Something went very wrong!',
+      error : err
     });
   }
 };
@@ -66,11 +67,18 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
+    console.log("from development");
     // console.log(err.inner.name);
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
-    console.log(err.inner['name']);
+    // console.log(err.inner['name']);
+    console.log("from production");
     let error = { ...err };
+    if(err.inner){
+      error.name = err.inner['name'] ? err.inner['name'] : error.name;
+    }
+   
+    // error.name = error.name || err.inner['name'];
     if (error.name === 'CastError') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (error.name === 'ValidationError')
