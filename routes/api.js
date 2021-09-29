@@ -122,9 +122,9 @@ router.post("/user/verify", verificationController.createUserVerifyToken);
 router.get('/user/sendToken/:token', verificationController.verifyUser);
 
 // RAZORPAY
-router.post("/user/:userId/product/:productId/buyProduct", razorPay.sendOrderId);
-router.post("/user/:userId/product/:productId/orderSuccessful", razorPay.orderSuccessful);
-router.post("/user/:userId/product/:productId/orderFailed", razorPay.orderFailed);
+router.post("/user/:userId/product/:productId/buyProduct", userById, requireSignin, isAuth, razorPay.sendOrderId);
+router.post("/user/:userId/product/:productId/orderSuccessful",userById, requireSignin, isAuth, razorPay.orderSuccessful);
+router.post("/user/:userId/product/:productId/orderFailed",userById, requireSignin, isAuth, razorPay.orderFailed);
 
 // SELLER
 router.get("/seller/:userId/products", restrictTo('seller'), SellerController.sellerProductDisplay);
