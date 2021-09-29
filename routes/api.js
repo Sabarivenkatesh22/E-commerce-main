@@ -127,7 +127,7 @@ router.post("/user/:userId/product/:productId/orderSuccessful",userById, require
 router.post("/user/:userId/product/:productId/orderFailed",userById, requireSignin, isAuth, razorPay.orderFailed);
 
 // SELLER
-router.get("/seller/:userId/products", restrictTo('seller'), SellerController.sellerProductDisplay);
+router.get("/seller/:userId/products",userById, requireSignin, isAuth, restrictTo('seller'), SellerController.sellerProductDisplay);
 
 
 
