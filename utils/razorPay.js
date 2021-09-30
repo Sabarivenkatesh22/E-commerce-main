@@ -4,6 +4,8 @@ const Razorpay = require('razorpay');
 const env = require('dotenv');
 env.config();
 const deliveryController = require('../controller/user/deliveryPageController');
+const Product = require('../models/product/product');
+const validationerror = require('../middleware/validationError');
 
 // const app = express();
 // app.set('views', 'views');
@@ -52,7 +54,7 @@ class RazorPay {
     //     //     res.redirect('/');
     //     // }
     // });
-    orderSuccessful(req, res) {
+    async orderSuccessful(req, res) {
         // app.post('/orderSuccessful', (req, res) => {
         console.log(req.body);
 
@@ -76,12 +78,20 @@ class RazorPay {
                     productId,
                     status: Status
                 };
+                var productPrice = await Product.findOne({productId:data.productId[0]});
+                if(!productPrice) return next(new validationerror("Invalid productId",401));
+                console.log(productPrice);
+                var price = productPrice.price;
            var result =  deliveryController.manualUpdateDeliveryItem(data);
+           var data_res = { 
+               response,
+               price 
+        }
         //    returns a promise 
-        //    console.log(result);
+           console.log(result);
         }
 
-        res.send(response);
+        res.status(200).json(data_res);
     };
     orderFailed(req, res) {
         // app.post('/orderFailed', (req, res) => {

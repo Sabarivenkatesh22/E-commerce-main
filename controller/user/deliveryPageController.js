@@ -70,19 +70,36 @@ class DeliveryPageController {
             //     productId: req.body.productId,
             //     customerId: userId
             // };
-            const deliveryPage = await DeliveryPage.findOneAndUpdate(
-                { customerId: data.userId },
-                {
-                    productId: data.productId,
-                    status: data.status,
-                },
-                {
-                    new: true,
-                }
-            );
+            console.log("data");
+            console.log(data);
+            const deliveryPage = await DeliveryPage.findOne(
+                { customerId: data.userId });
+                // {
+                //     productId: data.productId,
+                //     status: data.status,
+                // },
+                // {
+                //     new: true,
+                // }
+            
 
-            const statusOfProduct = deliveryPage.status;
+            // var result = data.productId[0];
+           deliveryPage.productId.push(data.productId);
+            // // // console.log(oldCartList);
+            // // // console.log(oldCartList.productId);
+            // data_res.forEach(d => {
+            //     if (d != null)
+            //         deliveryPage.productId.push(d)
+            // });
+            // await oldWishList.save();
 
+            // deliveryPage.productId = data.productId;
+            // deliveryPage.status = data.status;
+
+            const statusOfProduct = data.productId[1];
+            console.log("deliveryPage");
+            console.log(deliveryPage);
+                deliveryPage.save();
             // res.status(200).json({
             //     status: 'success',
             //     results: deliveryPage.length,
@@ -91,7 +108,7 @@ class DeliveryPageController {
             //     }
             // });
 
-            const deliveredProduct = await product.findOne(req.body.productId);
+            const deliveredProduct = await product.findOne(data.productId);
             if (statusOfProduct == "processing") {
                 deliveredProduct.sold = deliveredProduct.sold + 1;
                 deliveredProduct.quantity = deliveredProduct.quantity - 1;
@@ -149,14 +166,13 @@ class DeliveryPageController {
     }
 
     async getDeliveryPage(req, res,next) {
-        const deliveryPage = await DeliveryPage.find({
+        const deliveryPage = await DeliveryPage.findOne({
             customerId: req.params.userId,
         }).populate("productDetails");
 
+        console.log(deliveryPage);
         if (!deliveryPage)
-            res
-                .status(401)
-                .json(new validationerror("Process Failed, not a valid ID", 401));
+            return next (new validationerror("Process Failed, not a valid ID", 401));
         else
             res.status(200).json({
                 status: "success",

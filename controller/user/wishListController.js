@@ -1,6 +1,6 @@
 const User = require("../../models/userRole/user");
 // const validationerror = require("../../middleware/validationError");
-const validationerror = require('../../middleware/validationError_2');
+const validationerror = require('../../middleware/validationError');
 const Wishlist = require("../../models/userFeaturesModel/wishlistModel");
 
 class WishListController {
