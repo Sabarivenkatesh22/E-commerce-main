@@ -35,7 +35,7 @@ const deliveryPageSchema = new mongoose.Schema({
                 type:String,
                 enum:["packed","processing","inStation","readyToDelivery","delivered","cancelled"],
                 default:"processing",                  
-              }              
+              }           
               
           }],
           default :[{status : "processing"}]
