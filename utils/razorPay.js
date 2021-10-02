@@ -17,23 +17,31 @@ var razorpay = new Razorpay({
     key_secret: process.env.KEY_SECRET
 });
 class RazorPay {
-    sendOrderId(req, res) {
+    async sendOrderId(req, res) {
         // app.post('/orders', (req, res) => {
+            var productPrice = await Product.findOne({productId:req.params.productId});
+            if(!productPrice) return next(new validationerror("Invalid productId",401));
 
         console.log(req.body);
         var options = {
-            amount: req.body.price * 100,  // amount in the smallest currency unit
+            amount: productPrice.price * 100,  // amount in the smallest currency unit
             currency: "INR",
             receipt: "order_rcptid_11"
         };
         // this.status = "processing";
         // this.customerId = req.params.userId;
         // this.productId = req.params.productId;
-        razorpay.orders.create(options, function (err, order) {
+        razorpay.orders.create(options,  function (err, order) {
             console.log(order);
             // save this order id to database with field name (order.id)
-            res.json(order);
+            // res.json(order);
+            
+            res.status(200).json({
+                order,
+                
+            });
         });
+
 
 
     };
@@ -78,14 +86,13 @@ class RazorPay {
                     productId,
                     status: Status
                 };
-                var productPrice = await Product.findOne({productId:data.productId[0]});
-                if(!productPrice) return next(new validationerror("Invalid productId",401));
-                console.log(productPrice);
-                var price = productPrice.price;
+                // var productPrice = await Product.findOne({productId:data.productId[0]});
+                // if(!productPrice) return next(new validationerror("Invalid productId",401));
+                // console.log(productPrice);
+                // var price = productPrice.price;
            var result =  deliveryController.manualUpdateDeliveryItem(data);
            var data_res = { 
-               response,
-               price 
+               response
         }
         //    returns a promise 
            console.log(result);
