@@ -21,7 +21,7 @@ const deliveryPageSchema = new mongoose.Schema({
         //     default:"processing",
         // }
     ],
-    
+
     customerId:{
         type:String
     },
