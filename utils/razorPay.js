@@ -78,21 +78,23 @@ class RazorPay {
         if (expectedSignature === req.body.response.razorpay_signature) {
             response = { "signatureIsValid": "true" };
             // this.processOrder("True");
-            var Status = req.body.status;
+            // var Status = req.body.status;
             var userId = req.body.userId;
             var productId = req.body.productId,
                 data = {
                     userId,
                     productId,
-                    status: Status
+                    // status: Status
                 };
                 // var productPrice = await Product.findOne({productId:data.productId[0]});
                 // if(!productPrice) return next(new validationerror("Invalid productId",401));
                 // console.log(productPrice);
                 // var price = productPrice.price;
+                console.log(data);
            var result =  deliveryController.manualUpdateDeliveryItem(data);
            var data_res = { 
-               response
+               response,
+               result
         }
         //    returns a promise 
            console.log(result);

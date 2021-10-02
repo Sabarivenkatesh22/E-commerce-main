@@ -70,6 +70,7 @@ class DeliveryPageController {
             //     productId: req.body.productId,
             //     customerId: userId
             // };
+            console.log("from updateDeliveryItem");
             console.log("data");
             console.log(data);
             const deliveryPage = await DeliveryPage.findOne(
@@ -84,6 +85,8 @@ class DeliveryPageController {
             
 
             // var result = data.productId[0];
+            console.log("data productId");
+            console.log(data.productId);
            deliveryPage.productId.push(data.productId);
             // // // console.log(oldCartList);
             // // // console.log(oldCartList.productId);
@@ -96,9 +99,9 @@ class DeliveryPageController {
             // deliveryPage.productId = data.productId;
             // deliveryPage.status = data.status;
 
-            const statusOfProduct = data.productId[1];
-            console.log("deliveryPage");
-            console.log(deliveryPage);
+            const statusOfProduct = data.productId[0].status;
+            // console.log("deliveryPage");
+            // console.log(deliveryPage);
                 deliveryPage.save();
             // res.status(200).json({
             //     status: 'success',
@@ -134,7 +137,7 @@ class DeliveryPageController {
             //     customerId: userId
             // };
             const deliveryPage = await DeliveryPage.findOne(
-                { customerId: req.params.userId , productId: req.params.productId},
+                { customerId: req.params.userId },
     
             );
             deliveryPage.status = req.body.status;
@@ -178,6 +181,7 @@ class DeliveryPageController {
                 status: "success",
                 results: deliveryPage.length,
                 data: {
+                    productLength:deliveryPage.productId.length,
                     deliveryPage,
                 },
             });
