@@ -32,7 +32,7 @@ class RazorPay {
         // this.customerId = req.params.userId;
         // this.productId = req.params.productId;
         razorpay.orders.create(options,  function (err, order) {
-            console.log(order);
+            // console.log(order);
             // save this order id to database with field name (order.id)
             // res.json(order);
             
@@ -64,7 +64,7 @@ class RazorPay {
     // });
     async orderSuccessful(req, res) {
         // app.post('/orderSuccessful', (req, res) => {
-        console.log(req.body);
+        // console.log(req.body);
 
         // res.send("Payment Successful");
         let body = req.body.response.razorpay_order_id + "|" + req.body.response.razorpay_payment_id;

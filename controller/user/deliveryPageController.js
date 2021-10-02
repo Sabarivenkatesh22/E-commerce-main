@@ -84,7 +84,7 @@ class DeliveryPageController {
             
 
             // var result = data.productId[0];
-           deliveryPage.productId.push(data.productId);
+           deliveryPage.productId.push(data.productId[0]);
             // // // console.log(oldCartList);
             // // // console.log(oldCartList.productId);
             // data_res.forEach(d => {
@@ -97,8 +97,9 @@ class DeliveryPageController {
             // deliveryPage.status = data.status;
 
             const statusOfProduct = data.productId[1];
-            console.log("deliveryPage");
-            console.log(deliveryPage);
+            // console.log(statusOfProduct);
+            // console.log("deliveryPage");
+            // console.log(deliveryPage);
                 deliveryPage.save();
             // res.status(200).json({
             //     status: 'success',
