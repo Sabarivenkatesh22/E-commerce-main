@@ -1,6 +1,8 @@
 const expressJwt = require('express-jwt');
 const User = require('./../models/userRole/user');
-const validationerror = require("./validationError")
+const validationerror = require("./validationError");
+const Product = require('../models/product/product');
+
 
 require('dotenv').config({ path: '.env' });
 
@@ -34,3 +36,16 @@ exports.restrictTo = (...roles) => {
     next();
   };
 };
+
+exports.checkProductId =  (req,res ,next) => {
+  // var count =0;
+  var product;
+  var result = req.body.productId;
+  result.forEach( async function(e){
+       product = await Product.findOne({ productId: e });
+      //  console.log("from loop");
+      //  console.log(product.productId);
+       if(!product) {
+        return next(new validationerror("not a valid productId", 401));
+  }});
+}

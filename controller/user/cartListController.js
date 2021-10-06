@@ -1,6 +1,7 @@
 const User = require("../../models/userRole/user");
 const validationerror = require("../../middleware/validationError");
 const Cart = require("../../models/userFeaturesModel/cartModel");
+const Product = require("../../models/product/product");
 
 class CartListController {
     async makeCartList(userId) {
@@ -24,7 +25,7 @@ class CartListController {
 
     }
 
-    async createCartList(req, res,next) {
+    async createCartList(req, res, next) {
         try {
             // req.body -> should have product id 
             // var userId = req.params.userId;
@@ -34,16 +35,16 @@ class CartListController {
                 customerId: req.params.userId
             });
 
-             res.send("Done");
+            res.send("Done");
             // res.status(200).json({ CartList });
         } catch (error) {
-           return next(new validationerror(error.message, 401));
+            return next(new validationerror(error.message, 401));
 
         }
 
     }
 
-    async updateCartList(req, res,next) {
+    async updateCartList(req, res, next) {
         try {
             // req.body -> should have product id 
             // req.body.customerId = userId;
@@ -56,6 +57,19 @@ class CartListController {
             // const newProduct = oldWishList.productId.push(req.body.productId);
             console.log(...req.body.productId)
             var result = req.body.productId;
+            // var count =0;
+            // var product;
+            // result.forEach( async function(e){
+            //      product = await Product.findOne({ productId: e });
+            //      console.log("from loop");
+            //      console.log(product.productId);
+            //      if(product) {
+            //         count = count +1;
+            //     console.log(count);}
+            // })
+
+            // console.log(count,result.length);
+            // if (count == result.length) {
             var data = result.map(e => {
                 if (!oldCartList.productId.includes(e)) return e;
             });
@@ -78,28 +92,31 @@ class CartListController {
                     oldCartList
                 }
             });
+
+
         } catch (err) {
-           return next(new validationerror(err.message, 401));
+            return next(new validationerror(err.message, 401));
         }
+
     }
 
-    async getCartList(req, res,next) {
+    async getCartList(req, res, next) {
 
         const CartList = await Cart.find({ customerId: req.params.userId }).populate('productDetails');
 
-        if (!CartList)return next(new validationerror("Process Failed, not a valid ID", 401));
+        if (!CartList) return next(new validationerror("Process Failed, not a valid ID", 401));
 
         else res.status(200).json({ CartList })
 
     }
-    async deleteCartList(req, res,next) {
+    async deleteCartList(req, res, next) {
         try {
             const deleteCartList = await Cart.findOneAndUpdate({ customerId: req.params.userId });
             var result = req.body.productId;
-            var index ;
+            var index;
             result.forEach(e => {
                 if (deleteCartList.productId.includes(e)) {
-                    index =deleteCartList.productId.indexOf(e);
+                    index = deleteCartList.productId.indexOf(e);
                     if (index > -1) {
                         deleteCartList.productId.splice(index, 1);
                     }
@@ -110,7 +127,7 @@ class CartListController {
             await deleteCartList.save();
             res.send("Done");
         } catch (error) {
-           return next(new validationerror(error.message, 401));
+            return next(new validationerror(error.message, 401));
         }
 
 

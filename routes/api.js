@@ -34,7 +34,7 @@ const SellerController = require('../controller/product/sellerController');
 //PRODUCT IMAGE
 const uploadImageProduct = require('../middleware/uploadImageProduct');
 /*********Validators**********/
-const { requireSignin, isAuth, restrictTo } = require('../middleware/authorized');
+const { requireSignin, isAuth, restrictTo,checkProductId } = require('../middleware/authorized');
 const { userById } = require('../middleware/checking');
 
 /*********Routes**************/
@@ -75,9 +75,9 @@ router.post("/user/:userId/createWishlist", userById, requireSignin, isAuth, Wis
 router.post("/user/:userId/deleteWishlist", userById, requireSignin, isAuth, WishListController.deleteWishList);
 
 //  CARTLIST 
-router.post("/user/:userId/updateCartlist", userById, requireSignin, isAuth, CartListController.updateCartList);
+router.post("/user/:userId/updateCartlist", userById, requireSignin, isAuth,checkProductId, CartListController.updateCartList);
 router.get("/user/:userId/getCartlist", userById, requireSignin, isAuth, CartListController.getCartList);
-router.post("/user/:userId/createCartlist", userById, requireSignin, isAuth, CartListController.createCartList);
+// router.post("/user/:userId/createCartlist", userById, requireSignin, isAuth, CartListController.createCartList);
 router.post("/user/:userId/deleteCartlist", userById, requireSignin, isAuth, CartListController.deleteCartList);
 
 // DELIVERY PAGE 

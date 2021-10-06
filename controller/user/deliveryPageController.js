@@ -74,16 +74,11 @@ class DeliveryPageController {
             console.log(data);
             const deliveryPage = await DeliveryPage.findOne(
                 { customerId: data.userId });
-                // {
-                //     productId: data.productId,
-                //     status: data.status,
-                // },
-                // {
-                //     new: true,
-                // }
+              
             
 
             // var result = data.productId[0];
+            data.productId[0].push("processing");
            deliveryPage.productId.push(data.productId[0]);
             // // // console.log(oldCartList);
             // // // console.log(oldCartList.productId);
@@ -135,12 +130,16 @@ class DeliveryPageController {
             //     customerId: userId
             // };
             const deliveryPage = await DeliveryPage.findOne(
-                { customerId: req.params.userId , productId: req.params.productId},
+                { customerId: req.params.userId }
     
             );
-            deliveryPage.status = req.body.status;
+            // TODO: DO THIS ASS FAST AS POSSIBLE
+
+            deliveryPage.productId.forEach((e)=>{
+                if(e[0] == req.params.productId) e[1] = req.body.status;
+            });
             await deliveryPage.save();
-            const statusOfProduct = deliveryPage.status;
+            const statusOfProduct = req.body.status;
 
             res.status(200).json({
                 status: "success",
@@ -150,7 +149,7 @@ class DeliveryPageController {
                 },
             });
 
-            const deliveredProduct = await product.findOne(req.body.productId);
+            const deliveredProduct = await product.findOne(req.params.productId);
             if (statusOfProduct == "processing") {
                 deliveredProduct.sold = deliveredProduct.sold + 1;
                 deliveredProduct.quantity = deliveredProduct.quantity - 1;
@@ -169,7 +168,11 @@ class DeliveryPageController {
     async getDeliveryPage(req, res,next) {
         const deliveryPage = await DeliveryPage.findOne({
             customerId: req.params.userId,
-        }).populate("productDetails");
+        });
+        // .populate("productDetails");
+        // deliveryPage.productId.forEach(async (e) =>{
+
+        // });
 
         console.log(deliveryPage);
         if (!deliveryPage)
