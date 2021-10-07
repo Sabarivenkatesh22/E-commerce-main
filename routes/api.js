@@ -77,7 +77,7 @@ router.post("/user/:userId/deleteWishlist", userById, requireSignin, isAuth, Wis
 //  CARTLIST 
 router.post("/user/:userId/updateCartlist", userById, requireSignin, isAuth,checkProductId, CartListController.updateCartList);
 router.get("/user/:userId/getCartlist", userById, requireSignin, isAuth, CartListController.getCartList);
-// router.post("/user/:userId/createCartlist", userById, requireSignin, isAuth, CartListController.createCartList);
+router.post("/user/:userId/createCartlist", userById, requireSignin, isAuth, CartListController.createCartList);
 router.post("/user/:userId/deleteCartlist", userById, requireSignin, isAuth, CartListController.deleteCartList);
 
 // DELIVERY PAGE 

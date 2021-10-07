@@ -47,5 +47,7 @@ exports.checkProductId =  (req,res ,next) => {
       //  console.log(product.productId);
        if(!product) {
         return next(new validationerror("not a valid productId", 401));
-  }});
+  }
+});
+next();
 }

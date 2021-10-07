@@ -212,3 +212,8 @@ class DeliveryPageController {
 
 const deliveryPageController = new DeliveryPageController();
 module.exports = deliveryPageController;
+
+// http://tl-mode-secondary-backend.herokuapp.com/api/user/5acb5a21-fcd0-46bd-a430-e0a2564734bc/updateCartlist
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1YWNiNWEyMS1mY2QwLTQ2YmQtYTQzMC1lMGEyNTY0NzM0YmMiLCJyb2xlIjoiYnV5ZXIiLCJpYXQiOjE2MzM1OTkwNTEsImV4cCI6MTYzNDgwODY1MX0.7faow7fJtfUA30Yi-0g20EzKI26rIDhOcnsgTOYkYiI
+// {"productId":["e3598c0a-3b18-43c1-9a49-d6ce9f175350"]}
+// {"status":"error","message":"Something went very wrong!"}
