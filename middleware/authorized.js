@@ -15,6 +15,27 @@ exports.requireSignin = expressJwt({
 
 exports.isAuth = (req, res, next) => {
   let user = req.profile && req.auth && req.profile.userId == req.auth.userId;
+  // console.log(req.profile);
+  if(!user) {
+    return next(new validationerror('Access denied', 401));
+  }
+  next();
+}
+
+exports.isAuthForSubAdmin = async (req, res, next) => {
+  const userDetails = await User.findOne({userId: req.params.userId});
+  let user =  userDetails.userId == req.auth.userId;
+  // console.log(req.profile);
+  if(!user) {
+    return next(new validationerror('Access denied', 401));
+  }
+  next();
+}
+
+exports.isAuthForAdmin = async (req, res, next) => {
+  const userDetails = await User.findOne({email: req.body.adminEmail});
+  let user =  userDetails.userId == req.auth.userId;
+  // console.log(req.profile);
   if(!user) {
     return next(new validationerror('Access denied', 401));
   }
@@ -51,3 +72,44 @@ exports.checkProductId =  (req,res ,next) => {
 });
 next();
 }
+
+exports.checkUser = (...roles) => {
+  return async (req, res, next) => {
+    // roles ['admin', 'lead-guide']. role='user'
+    try{
+      const user = await User.findOne({email: req.body.email});
+      // console.log("from checkUser");
+      // console.log(user);
+      // user ? user : return next(new validationerror("invalid email and password"));
+      if (!roles.includes(user.userRole)) {
+        
+         return next(new validationerror('You do not have permission to perform this action', 403));
+        
+      }
+  
+      next();
+    }
+
+    catch(err) {
+      return next(new validationerror('user not exisits', 403));
+    }
+   
+  };
+};
+
+exports.adminChecking = (...roles) => {
+  return async (req, res, next) => {
+    // roles ['admin', 'lead-guide']. role='user'
+    const user = await User.findOne({email: req.body.adminEmail});
+    // console.log("from checkUser");
+    // console.log(user);
+    // user ? user : return next(new validationerror("invalid email and password"));
+    if (!roles.includes(user.userRole)) {
+      
+       return next(new validationerror('You do not have permission to perform this action', 403));
+      
+    }
+
+    next();
+  };
+};

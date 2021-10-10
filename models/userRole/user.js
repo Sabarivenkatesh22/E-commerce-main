@@ -39,16 +39,16 @@ const userSchema = new Schema(
       // select: false
     },
     verified: {
-      type:String,
-      default: "false"
+      type:Boolean,
+      default: false
     },
     verifiedByAdmin: {
-      type:String,
-      default: "false"
+      type:Boolean,
+      default: false
     },
     manualVerification: {
-      type:String,
-      default: "false"
+      type:Boolean,
+      default: false
     },
     addressId: {
       type: String,
@@ -72,7 +72,7 @@ const userSchema = new Schema(
     },
     userRole:{
       type:String,
-      enum: ['buyer', 'seller', 'admin'],
+      enum: ['buyer', 'seller', 'admin','subAdmin'],
       required:[true,'A user must have a role'],
       default:"buyer"
     },
@@ -96,20 +96,20 @@ const userSchema = new Schema(
     }
 );
 
-  userSchema.pre('save', async function (next) {
-    // Only run this function if password was actually modified
-    this.userId = uuid();
-    this.createdAt= moment(Date.now()).unix();
-    this.updatedAt= moment(Date.now()).unix();
+//   userSchema.pre('save', async function (next) {
+//     // Only run this function if password was actually modified
+//     // this.userId = uuid();
+//     // this.createdAt= moment(Date.now()).unix();
+//     // this.updatedAt= moment(Date.now()).unix();
 
-    // Hash the password with cost of 12
-    let salt = await bcrypt.genSaltSync(10)
-    let pass = await this.password
-    this.password = await bcrypt.hashSync(pass, salt),
+//     // // Hash the password with cost of 12
+//     // let salt = await bcrypt.genSaltSync(10)
+//     // let pass = await this.password
+//     // this.password = await bcrypt.hashSync(pass, salt),
     
 
-    next();
-});
+//     next();
+// });
 
 // userSchema.virtual('wishlist',{
 //   ref:'wishlistModel',

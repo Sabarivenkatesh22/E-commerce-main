@@ -40,13 +40,14 @@ class ForgetPasswordController{
   // if(s1.localeCompare(token)) console.log("same");
   // const hashedToken = Hashing.hash(s1,((s1.length)));
     // console.log(hashedToken);
-    
+    console.log("from resetPassword");
     var token = req.params.token.trim();
     const hashedToken = Hashing.hash(token,((token.length)));
+    console.log(hashedToken);
     const user = await User.findOne({
       token: hashedToken,
-      passwordResetExpires: { $gt: Date.now()
-     }
+      // passwordResetExpires: { $gt: Date.now()
+    //  }
     });
   
     console.log(req.body.password);
@@ -57,7 +58,11 @@ class ForgetPasswordController{
     //   return next(new validationerror('Token is invalid or has expired', 400));
     return next(new validationerror("Process Failed, Check email and password", 400));
     }
-    user.password = req.body.password;
+    
+    let salt = bcrypt.genSaltSync(10)
+    let pass = req.body.password;
+    let password = bcrypt.hashSync(pass, salt);
+    user.password = password;
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save();

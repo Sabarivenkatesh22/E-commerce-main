@@ -24,6 +24,9 @@ const productImageController = require('../controller/product/productImageContro
 const productViewController = require('../controller/product/productViewController')
 const reviewController = require('../controller/product/reviewController')
 
+// ADMIN
+const adminController = require('../controller/admin/adminController');
+
 // RAZORPAY
 const razorPay = require('../utils/razorPay');
 
@@ -34,7 +37,7 @@ const SellerController = require('../controller/product/sellerController');
 //PRODUCT IMAGE
 const uploadImageProduct = require('../middleware/uploadImageProduct');
 /*********Validators**********/
-const { requireSignin, isAuth, restrictTo,checkProductId } = require('../middleware/authorized');
+const { requireSignin, isAuth, restrictTo,checkProductId,checkUser,adminChecking, isAuthForAdmin, isAuthForSubAdmin } = require('../middleware/authorized');
 const { userById } = require('../middleware/checking');
 
 /*********Routes**************/
@@ -46,7 +49,10 @@ router.get("/test", testController.test);
 // router.post("/dummypath/admin/register", registerController.registerUser); //TESTED
 router.post("/buyer/register", registerController.registerUser);//TESTED
 router.post("/seller/register", registerController.registerUser); //TESTED
-router.post("/seller/verification", restrictTo("admin"), registerController.verifySeller);
+router.post("/admin/register",registerController.registerUser);  // just for testing
+router.post("/subAdmin/register",requireSignin, isAuthForAdmin,adminChecking('admin') ,registerController.registerUser); 
+// router.post("/seller/verification", restrictTo("admin"), registerController.verifySeller);
+// router.post("/seller/login", checkBuyerSeller("seller"), loginController.userLogin); 
 // VERIFICATION
 router.get("/user/verification/:token", registerController.checkToken);
 
@@ -55,13 +61,23 @@ router.post('/forgotPassword', forgetPasswordController.forgetPassword);
 router.patch('/resetPassword/:token', forgetPasswordController.resetPassword);
 
 //LOGIN
-router.post("/user/login", loginController.userLogin); //TESTED
+router.post("/user/login", checkUser("buyer"),loginController.userLogin); //TESTED
+router.post("/seller/login", checkUser("seller"), loginController.userLogin); 
+router.post("/admin1234/login", checkUser("admin"), loginController.userLogin); 
+router.post("/subAdmin3456/login", checkUser("subAdmin"), loginController.userLogin); 
 //router.post("/dummypath/admin/login", loginController.adminLogin); Add new login for admin panel and prevent admin role in above api
-
+ 
 //USER-VIEW
 router.get("/user/:userId/view", userById, requireSignin, isAuth, userViewController.userDetails);
 router.get("/user/:userId/allUsers", userViewController.getAllUsers);
 //router.get("/dummypath/admin/:userId/view", userById, requireSignin, isAuth, userViewController.userAdminDetails);
+
+// ADMIN VERIFY SELLER
+
+// Note: Admin should provide seller email to verify him nad also contactNumber and address as a 
+// prof of verification
+router.post("/admin/verifySeller",requireSignin, isAuthForAdmin, adminChecking("admin"),adminController.verifySeller);
+router.post("/subAdmin/:userId/verifySeller",requireSignin, isAuthForSubAdmin, restrictTo("subAdmin"),adminController.verifySeller);  
 
 //USER-UPDATE
 router.post("/user/:userId/edit", userById, requireSignin, isAuth, userUpdateController.editUserDetails);
@@ -99,6 +115,16 @@ router.post("/seller/:userId/product/edit", userById, requireSignin, isAuth, res
 
 // PRODUCT-VIEW
 router.get("/user/product/:productId", productViewController.productView);
+
+// USER 
+router.get("/user", userUpdateController.deleteUser);
+
+// product delete
+
+// router.get("/user/product", productUpdateController.deleteProduct);
+// router.get("/user/delCartList", productUpdateController.deleteCartList);
+// router.get("/user/delWishList", productUpdateController.deleteWishList);
+// router.get("/user/deleteDeliveryPage", productUpdateController.deleteDeliveryPage);
 
 //PRODUCT-UPDATE (only sellers permission)
 router.post("/seller/:userId/product/update/quantity", userById, requireSignin, isAuth, restrictTo("seller"), productUpdateController.updateQuantityProduct);

@@ -14,6 +14,10 @@ const sellerSchema = new mongoose.Schema({
         enum:["verified","not verified"],
         default:"not verified",
         required:["true","addressId should be verified"]
+    },
+
+    verifiedBy:{
+        type:"string",
     }
 
 

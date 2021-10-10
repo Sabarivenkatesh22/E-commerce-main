@@ -5,7 +5,8 @@ const wishListController = require("../user/wishListController");
 const cartListController = require("../user/cartListController");
 const deliveryPageController = require("../user/deliveryPageController");
 
-const { v4: uuidv4 } = require("uuid");
+// const { v4: uuidv4 } = require("uuid");
+const {uuid} = require("uuidv4");
 const moment = require("moment");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -15,7 +16,14 @@ class RegisterController {
   async registerUser(req, res, next) {
     try {
 
-     
+    //   this.userId = uuid();
+    // this.createdAt= moment(Date.now()).unix();
+    // this.updatedAt= moment(Date.now()).unix();
+
+    // // Hash the password with cost of 12
+    let salt = bcrypt.genSaltSync(10)
+    let pass = req.body.password;
+    let password = bcrypt.hashSync(pass, salt);
 
       const user = await User.create({
         email: req.body.email,
@@ -25,19 +33,12 @@ class RegisterController {
         contactNumber: req.body.contactNumber,
         password: req.body.password,
         userRole: req.body.userRole,
+        userId:uuid(),
+        createdAt: moment(Date.now()).unix(),
+        updatedAt: moment(Date.now()).unix(),
+        password
       });
-    //  const  result = await promise.all([
-    //     wishListController.createWishList(user.userId,res),
-    //     cartListController.createCartList(user.userId,res),
-    //     deliveryPageController.createDeliveryPage(user.userId,res),
-    //   ]);
-      
-      // let emailCheck = await User.findOne({
-      //   email: email,
-      // });
-      // let usernameCheck = await User.findOne({
-      //   username: username,
-      // });
+    
       console.log(user);
      var resultCartList  = await cartListController.makeCartList(user.userId);
      var resultWishList  = await wishListController.makeWishList(user.userId);
@@ -84,12 +85,12 @@ class RegisterController {
     // this verification link to be sent to user email 
      
     // this.sendVerifyToken(req);
-    if (role == "seller") {
-      this.verifySeller(req);
-    }
-    if (role == "admin") {
-      this.verifyAdmin(req);
-    }
+    // if (role == "seller") {
+    //    this.verifySeller(req);
+    // }
+    // if (role == "admin") {
+    //    this.verifyAdmin(req);
+    // }
 
 
   }
@@ -128,19 +129,19 @@ class RegisterController {
 
   // the req json should be in the form of: see sellerVerifyModel and 
   // req should contain the userID of the seller
-  async verifySeller(req, res) {
+  // async verifySeller(req, res) {
 
-    const user = await User.findOne({ userId: req.body.userId });
-    if (!user) return next(new validationerror("User is not found", 400));
-    const seller = await sellerVerifyModel.create({
-      contactNumber: req.body.contactNumber,
-      addressId: req.body.addressId,
-    });
-    if (seller != null) {
-      user.verifiedByAdmin = "true";
-      res.send("seller verified");
-    }
-  }
+  //   const user = await User.findOne({ userId: req.body.userId });
+  //   if (!user) return next(new validationerror("User is not found", 400));
+  //   const seller = await sellerVerifyModel.create({
+  //     contactNumber: req.body.contactNumber,
+  //     addressId: req.body.addressId,
+  //   });
+  //   if (seller != null) {
+  //     user.verifiedByAdmin = "true";
+  //     res.send("seller verified");
+  //   }
+  // }
 
   // async sellerRegister(req, res){
 

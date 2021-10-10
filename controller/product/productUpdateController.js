@@ -4,6 +4,9 @@ const ProductPoints = require("./../../models/product/productPoints")
 const ProductDiscount = require("./../../models/product/productDiscount")
 const ProductImages = require("./../../models/product/productImages")
 const validationerror = require("../../middleware/validationError")
+const cartList = require('../../models/userFeaturesModel/cartModel');
+const deliveryPage = require('../../models/userFeaturesModel/deliveryPageModel');
+const wishList = require('../../models/userFeaturesModel/wishlistModel');
 
 const { v4: uuidv4 } = require('uuid')
 const moment = require("moment")
@@ -249,6 +252,50 @@ class ProductEditController {
 
     }
 
+    async deleteProduct(req,res,next){
+        let userId = req.params.userId;
+        // const delFood =  await foodData.findByIdAndDelete(req.params.id);
+        const delFood =  await Product.deleteMany({});
+        if(!delFood)
+        {
+            return next(new validationerror('No food found with that ID', 404));
+        }
+         res.send("Done");
+
+}
+async deleteCartList(req,res,next){
+    let userId = req.params.userId;
+    // const delFood =  await foodData.findByIdAndDelete(req.params.id);
+    const delFood =  await cartList.deleteMany({});
+    if(!delFood)
+    {
+        return next(new validationerror('No food found with that ID', 404));
+    }
+     res.send("Done");
+
+}
+async deleteWishList(req,res,next){
+    let userId = req.params.userId;
+    // const delFood =  await foodData.findByIdAndDelete(req.params.id);
+    const delFood =  await wishList.deleteMany({});
+    if(!delFood)
+    {
+        return next(new validationerror('No food found with that ID', 404));
+    }
+     res.send("Done");
+
+}
+async deleteDeliveryPage(req,res,next){
+    let userId = req.params.userId;
+    // const delFood =  await foodData.findByIdAndDelete(req.params.id);
+    const delFood =  await deliveryPage.deleteMany({});
+    if(!delFood)
+    {
+        return next(new validationerror('No food found with that ID', 404));
+    }
+     res.send("Done");
+
+}
 }
 
 const productEditController = new ProductEditController()

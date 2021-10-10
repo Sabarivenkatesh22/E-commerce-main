@@ -38,7 +38,7 @@ class UserUpdateController {
     async deleteUser(req,res,next){
         let userId = req.params.userId;
         // const delFood =  await foodData.findByIdAndDelete(req.params.id);
-        const delFood =  await User.deleteMany({userId});
+        const delFood =  await User.deleteMany({});
         if(!delFood)
         {
             return next(new validationerror('No food found with that ID', 404));
@@ -46,6 +46,8 @@ class UserUpdateController {
          res.send("Done");
 
 }
+
+
 
 }
 

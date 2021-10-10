@@ -42,6 +42,9 @@ class LoginController {
               else if (user.userRole == "admin") {
                   return res.status(200).json({ message:"ok", token:token, firstname:user.firstname, lastname:user.lastname, userId:user.userId, email:user.email, role:user.rolee, verified:user.verified, manualVerification:user.manualVerification});
               }
+              else if (user.userRole == "subAdmin") {
+                return res.status(200).json({ message:"ok", token:token, firstname:user.firstname, lastname:user.lastname, userId:user.userId, email:user.email, role:user.rolee, verified:user.verified, manualVerification:user.manualVerification});
+            }
               else {
                   return next(new validationerror("Process Failed, Undefined Role", 400));
               }
