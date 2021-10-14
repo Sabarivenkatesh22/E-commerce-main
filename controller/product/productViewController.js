@@ -8,24 +8,34 @@ class ProductViewController {
     async productView(req, res,next) {
         try {
             // make sure that two populate works
-            const product = await Product.findOne({ productId: req.params.productId }).populate('reviews')
+            const product = await Product.findOne({ productId: req.params.productId }).populate( "reviews")
             .populate({
                 path: "discount",
                 select: 'discount'
             });
+            // console.log(product.reviews);
+            let numberOfReviews = product.reviews.length; 
+            let sumOfRatings = 0;
+            let reviewRating = product.reviews.forEach( function (review) {
+                sumOfRatings += review.rating; 
+            });
+            let avgRating = sumOfRatings/numberOfReviews;
+            product.averageRating = avgRating;
+            product.numberOfRatings = numberOfReviews;
             // const reviewCustomerId = product.reviews[0].customerId;
             // console.log(reviewCustomerId);
             // const Review = await review.findOne({customerId: reviewCustomerId}).populate('userDetails');
-            console.log(product);
+            // console.log(product);
             res.status(200).json({
                 result: product.length,
-                data: [
+                
                     product
-                ],
+                
                 // reviews:[
                 //     Review
                 // ]
-            })
+            });
+            await product.save();
         } catch (error) {
            return next(new validationerror(error.message, 400));
         }

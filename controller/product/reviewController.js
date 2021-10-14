@@ -11,12 +11,14 @@ class ReviewController {
             const review = await Review.create({
                 customerId: req.params.userId, 
                 productId: req.params.productId,
-                review: req.body.review,
+                title: req.body.title,
+                description: req.body.description,
                 rating: req.body.rating
             });
             res.send("Done");
         } catch (error) {
            return next(new validationerror("Process Failed, review cannot be added", 400));
+        // return next(new validationerror(error.message, 400));
         }
        
     }

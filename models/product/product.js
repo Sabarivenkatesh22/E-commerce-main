@@ -50,16 +50,22 @@ const productSchema = new Schema(
       type: Number,
       default: 0
     },
-    cartListUserId:({
-      type: String,
-      unique: true
-    }),
-    cartListId:{
-      type: String
-    }
+    // cartListUserId:({
+    //   type: String,
+    //   unique: true
+    // }),
+    // cartListId:{
+    //   type: String
+    // }
     // wishListUserId: [{
     //   type: String
     // }]
+    averageRating:{
+      type: Number,
+    },
+    numberOfRatings:{
+      type: Number,
+    }
   },
   {
     timestamps: true,
@@ -92,5 +98,5 @@ productSchema.virtual('discount',{
   localField: 'productId'
 });
 
-const Product = mongoose.model("product", productSchema);
+const Product = mongoose.model("products", productSchema);
 module.exports = Product;
