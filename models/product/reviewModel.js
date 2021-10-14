@@ -8,13 +8,13 @@ const reviewSchema = new mongoose.Schema(
     customerId: {
       type: String,
     },
-    review: {
+    title: {
       type: String,
-      required: [true, "A review should be provided!"],
+      required: [true, "A review title should be provided!"],
     },
     description: {
       type: String,
-      required: [true, "A description should be provided!"],
+      // required: [true, "A description should be provided!"],
     },
     rating: {
       type: Number,

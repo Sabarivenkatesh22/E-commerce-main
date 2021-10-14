@@ -19,9 +19,8 @@ class ProductViewController {
             console.log(product);
             res.status(200).json({
                 result: product.length,
-                data: [
-                    product
-                ],
+                product
+                
                 // reviews:[
                 //     Review
                 // ]

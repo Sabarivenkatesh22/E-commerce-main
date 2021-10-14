@@ -121,7 +121,7 @@ router.get("/user", userUpdateController.deleteUser);
 
 // product delete
 
-// router.get("/user/product", productUpdateController.deleteProduct);
+router.get("/user/product", productUpdateController.deleteProduct);
 // router.get("/user/delCartList", productUpdateController.deleteCartList);
 // router.get("/user/delWishList", productUpdateController.deleteWishList);
 // router.get("/user/deleteDeliveryPage", productUpdateController.deleteDeliveryPage);

@@ -12,11 +12,11 @@ class ProductAddController {
         // console.log("from product add controller");
         var userId = req.params.userId;
 
-        if(userId == req.auth.userId){
+        try {
             let user = await User.findOne({ userId: userId});
-            if (user == null) {
-                return next (new validationerror("Process Failed, User not found", 400));
-            }
+            // if (user == null) {
+            //     return next (new validationerror("Process Failed, User not found", 400));
+            // }
             
             let title = req.body.title;
             let productId = uuidv4();
@@ -40,14 +40,17 @@ class ProductAddController {
 
             await productAdd.save()
             return res.status(200).json({"message":"ok"})
-
-        } else {
-            return next(new validationerror("Process Failed, Unauthorized", 401));
+        } catch (error) {
+            console.error(error);
+            return next (new validationerror(error.message, 400));
+            
         }
+            
 
+        } 
     }
 
-}
+
 
 const productAddController = new ProductAddController()
 module.exports = productAddController

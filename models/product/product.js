@@ -29,7 +29,8 @@ const productSchema = new Schema(
     },
     category: {
       type: String,
-      ref: 'Category',
+      enum:["Clothing","Toys","Sports","Beauty","Automobiles","Books","Media",
+                    "Natural","Dairy","Food", "Headphones","Mobiles","Earpods"],
       required: true
     },
     quantity: {
@@ -50,12 +51,16 @@ const productSchema = new Schema(
       type: Number,
       default: 0
     },
-    cartListUserId:({
-      type: String,
-      unique: true
-    }),
-    cartListId:{
-      type: String
+    // cartListUserId: ({
+    //   type: String,
+    //   unique: true
+    // }),
+    // cartListId: {
+    //   type: String
+    // },
+    averageRating: {
+      type: Number
+
     }
     // wishListUserId: [{
     //   type: String
@@ -81,13 +86,13 @@ productSchema.virtual('reviews', {
   localField: 'productId'
 });
 
-productSchema.virtual('cartListUserDetails',{
-  ref:'user',
-  foreignField: 'userId',
-  localField: 'cartListUserId'
-});
-productSchema.virtual('discount',{
-  ref:'productDiscount',
+// productSchema.virtual('cartListUserDetails', {
+//   ref: 'user',
+//   foreignField: 'userId',
+//   localField: 'cartListUserId'
+// });
+productSchema.virtual('discount', {
+  ref: 'productDiscount',
   foreignField: 'productId',
   localField: 'productId'
 });
