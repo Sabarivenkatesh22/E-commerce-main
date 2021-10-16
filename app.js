@@ -10,7 +10,7 @@ const cors = require('cors')
 const path = require('path');
 
 /************ConfigDatas************/
-dotenv.config();
+dotenv.config({path:'../config.env'});
 
 /************DataParsing************/
 app.use(bodyParser.urlencoded({extended: true}));

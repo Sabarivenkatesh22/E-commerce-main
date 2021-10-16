@@ -2,7 +2,7 @@
 const crypto = require('crypto');
 const Razorpay = require('razorpay');
 const env = require('dotenv');
-env.config();
+env.config({path:'./config.env'});
 const deliveryController = require('../controller/user/deliveryPageController');
 const Product = require('../models/product/product');
 const validationerror = require('../middleware/validationError');
@@ -11,7 +11,7 @@ const validationerror = require('../middleware/validationError');
 // app.set('views', 'views');
 // app.set('view engine', 'ejs');
 // app.use(express.json());
-
+console.log(process.env.KEY_ID);
 var razorpay = new Razorpay({
     key_id: process.env.KEY_ID,
     key_secret: process.env.KEY_SECRET
