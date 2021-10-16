@@ -11,7 +11,7 @@ const validationerror = require('../middleware/validationError');
 // app.set('views', 'views');
 // app.set('view engine', 'ejs');
 // app.use(express.json());
-console.log(process.env.KEY_ID);
+// console.log(process.env.KEY_ID);
 var razorpay = new Razorpay({
     key_id: process.env.KEY_ID,
     key_secret: process.env.KEY_SECRET

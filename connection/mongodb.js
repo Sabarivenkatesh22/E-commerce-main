@@ -1,7 +1,7 @@
 let mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-require('dotenv').config({ path: '.env' }); 
+require('dotenv').config({ path: 'config.env' }); 
 
 const mongoConnection = process.env.DATABASE_CONNECT
 
