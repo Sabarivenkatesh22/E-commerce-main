@@ -4,10 +4,11 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const Hashing = require("./../../utils/hashing");
 const { type } = require("os");
+const email = require("../../utils/email");
 
-class ForgetPasswordController{
+class ForgetPasswordController {
 
-    async forgetPassword (req, res,next) {
+  async forgetPassword(req, res, next) {
     // 1) Get user based on POSTed email
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
@@ -24,41 +25,42 @@ class ForgetPasswordController{
       'host'
     )}/api/resetPassword/${resetToken}`;
     res.send(resetURL);
-};
+  };
 
-// in the reset password token api we have to use token parameter 
- async resetPassword  (req, res,next)  {
+  // in the reset password token api we have to use token parameter 
+  async resetPassword(req, res, next) {
     // 1) Get user based on the token
     // const hashedToken = crypto
     //   .createHash('sha256')
     //   .update(req.params.token)
     //   .digest('hex');
-  // const token = (req.params.token).toString();
-  // console.log(token);
-  // console.log(token.length);
-  // const s1 = "sabarivenkatesh";
-  // if(s1.localeCompare(token)) console.log("same");
-  // const hashedToken = Hashing.hash(s1,((s1.length)));
+    // const token = (req.params.token).toString();
+    // console.log(token);
+    // console.log(token.length);
+    // const s1 = "sabarivenkatesh";
+    // if(s1.localeCompare(token)) console.log("same");
+    // const hashedToken = Hashing.hash(s1,((s1.length)));
     // console.log(hashedToken);
     console.log("from resetPassword");
     var token = req.params.token.trim();
-    const hashedToken = Hashing.hash(token,((token.length)));
+    const hashedToken = Hashing.hash(token, ((token.length)));
     console.log(hashedToken);
     const user = await User.findOne({
       token: hashedToken,
+      //  important:  // have to enable this comment
       // passwordResetExpires: { $gt: Date.now()
-    //  }
+      //  }
     });
-  
+
     console.log(req.body.password);
     console.log(user);
     console.log("from reset password");
     // 2) If token has not expired, and there is user, set the new password
     if (!user) {
-    //   return next(new validationerror('Token is invalid or has expired', 400));
-    return next(new validationerror("Process Failed, Check email and password", 400));
+      //   return next(new validationerror('Token is invalid or has expired', 400));
+      return next(new validationerror("Process Failed, Check email and password", 400));
     }
-    
+
     let salt = bcrypt.genSaltSync(10)
     let pass = req.body.password;
     let password = bcrypt.hashSync(pass, salt);
@@ -66,15 +68,35 @@ class ForgetPasswordController{
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save();
-  
+
     // 3) Update changedPasswordAt property for the user
     // we have pre middleware in user model to do this...
     // 4) Log the user in, send JWT
     res.send("done");
   };
 
-}
+  async changePassword(req, res, next) {
+    console.log("from changePassword");
+    try {
+      const user = await User.findOne({ userId: req.params.userId });
+      if (!user) {
+        return next(new validationerror('There is no user.', 404));
+      }
+      if (bcrypt.compareSync(req.body.oldPassword, user.password)) {
+        console.log(user);
+        user.password = req.body.newPassword;
+        user.save();
+        new email(user).sendChangedPasswordNotification();
+        res.send("Done");
+      }
 
+    } catch (error) {
+      return next(new validationerror(error.message, 404));
+    }
+
+
+  }
+}
 
 const forgetPasswordController = new ForgetPasswordController();
 module.exports = forgetPasswordController;

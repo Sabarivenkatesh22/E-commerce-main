@@ -9,8 +9,8 @@ env.config();
 
 module.exports = class Email {
   constructor(user, url) {
-    this.to = "deepikaks95@gmail.com";
-    this.firstName = user.username;
+    this.to = "124003251@sastra.ac.in";
+    this.firstName = user.firstname;
     this.url = url || null;
     this.from = `TLMode <${process.env.EMAIL_FROM}>`;
     sgMail.setApiKey(
@@ -74,6 +74,9 @@ module.exports = class Email {
    sendWelcome() {
      this.send('welcome', 'Welcome to the TL Mode!');
   }
+  sendChangedPasswordNotification() {
+    this.send('passwordChanged', 'Did you reset your password?');
+ }
 //   sendsellerVerification() {
 //     this.send('sellerVerification', 'Verification Link For Seller');
 //  }

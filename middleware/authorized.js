@@ -113,3 +113,18 @@ exports.adminChecking = (...roles) => {
     next();
   };
 };
+
+exports.userVerification = async (req,res,next) => {
+    // roles ['admin', 'lead-guide']. role='user'
+    const user = await User.findOne({userId: req.params.userId});
+    console.log("from user verification");
+    console.log(user);
+    // user ? user : return next(new validationerror("invalid email and password"));
+    if (!(user.verified)) {
+      
+       return next(new validationerror('You are not verified, please check your email for verification', 403));      
+    }
+
+    next();
+  
+};

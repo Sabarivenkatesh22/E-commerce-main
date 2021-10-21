@@ -19,7 +19,7 @@ class CartListController {
             // res.status(200).json({ CartList });
         } catch (error) {
             //return next(new validationerror(error.message, 401));
-            return "error";
+            return error.message;
 
         }
 

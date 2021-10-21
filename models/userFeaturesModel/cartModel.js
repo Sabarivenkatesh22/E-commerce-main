@@ -4,7 +4,6 @@ const cartlistSchema = new mongoose.Schema({
     productId:[
         {
             type:String,
-            unique:true
         }
     ],
     

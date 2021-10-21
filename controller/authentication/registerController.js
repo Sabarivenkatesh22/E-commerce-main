@@ -4,26 +4,93 @@ const validationerror = require("../../middleware/validationError");
 const wishListController = require("../user/wishListController");
 const cartListController = require("../user/cartListController");
 const deliveryPageController = require("../user/deliveryPageController");
+const Email = require("../../utils/email");
+const Hashing = require("../../utils/hashing");
+const emailController = require("../emailController/emailController");
 
 // const { v4: uuidv4 } = require("uuid");
-const {uuid} = require("uuidv4");
+const { uuid } = require("uuidv4");
 const moment = require("moment");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 class RegisterController {
 
+  // async sendToken(req,next) {
+  //   try {
+  //     console.log("from sendVerifyToken");
+  //     const user = await User.findOne({ email: req.body.email });
+  //     const token = user.createEmailVerificationToken();
+  //     await user.save();
+  //     const checkURL = `${req.protocol}://${req.get(
+  //       "host"
+  //     )}/api/user/verification/${token}`;
+
+  //     // send email to user
+  //     new Email(user, checkURL).sendWelcome();
+
+  //     console.log(checkURL);
+  //   } catch (error) {
+  //     return next(new validationerror(error.message,400));
+  //   }
+  // }
+
+  //  checking of token to verify the user
+  // async checkToken(req, res) {
+
+  //   console.log("from checkToken");
+  //   var token = req.params.token.trim();
+  //   const hashedToken = Hashing.hash(token,((token.length)));
+  //   console.log(hashedToken);
+  //   const user = await User.findOne({
+  //     token: hashedToken,
+  //     // passwordResetExpires: { $gt: Date.now()
+  //   //  }
+  //   });
+  
+  //   // let user = await User.findOne({
+  //   //   passwordResetToken: hashedToken,
+  //   // });
+  //   if (!user) {
+  //     return next(new validationerror("Token is invalid or has expired", 400));
+  //   } else {
+  //     // making first verification true for every user after checking the token
+  //     (user.verified = "true"),
+  //      user.save();
+  //     res.send("User verified");
+  //   }
+  // };
+
+  // important: send only new email in req
+  async changeEmail(req, res,next) {
+    try {
+      let user = User.findOne(req.params.userId);
+      user.email = req.body.email;
+      user.verified = false;
+      emailController.sendVerifyToken(req,next);
+      // this.sendToken(req);
+      user.save();
+    } catch (error) {
+      return next(new validationerror(error.message,400));
+    }
+    
+  };
+
+  // async toPrint()
+  // {
+  //   console.log('toPrint');
+  // };
+
   async registerUser(req, res, next) {
     try {
+      //   this.userId = uuid();
+      // this.createdAt= moment(Date.now()).unix();
+      // this.updatedAt= moment(Date.now()).unix();
 
-    //   this.userId = uuid();
-    // this.createdAt= moment(Date.now()).unix();
-    // this.updatedAt= moment(Date.now()).unix();
-
-    // // Hash the password with cost of 12
-    let salt = bcrypt.genSaltSync(10)
-    let pass = req.body.password;
-    let password = bcrypt.hashSync(pass, salt);
+      // // Hash the password with cost of 12
+      let salt = bcrypt.genSaltSync(10);
+      let pass = req.body.password;
+      let password = bcrypt.hashSync(pass, salt);
 
       const user = await User.create({
         email: req.body.email,
@@ -33,28 +100,27 @@ class RegisterController {
         contactNumber: req.body.contactNumber,
         password: req.body.password,
         userRole: req.body.userRole,
-        userId:uuid(),
+        userId: uuid(),
         createdAt: moment(Date.now()).unix(),
         updatedAt: moment(Date.now()).unix(),
-        password
+        password,
       });
-    
+
       console.log(user);
-     var resultCartList  = await cartListController.makeCartList(user.userId);
-     var resultWishList  = await wishListController.makeWishList(user.userId);
-     var resultDeliveryPage  = await deliveryPageController.makeDeliveryPage(user.userId);
-     console.log(resultCartList);
-     console.log(resultWishList);
-     console.log(resultDeliveryPage);
-
+      var resultCartList = await cartListController.makeCartList(user.userId);
+      var resultWishList = await wishListController.makeWishList(user.userId);
+      var resultDeliveryPage = await deliveryPageController.makeDeliveryPage(
+        user.userId
+      );
+      console.log(resultCartList);
+      console.log(resultWishList);
+      console.log(resultDeliveryPage);
+      emailController.sendVerifyToken(req,next);
+      // this.sendToken(req);
+      // this.toPrint();
     } catch (err) {
-      return next(
-          new validationerror(
-            err.message,
-            400
-          )
-        );
-
+      console.log(err);
+      return next(new validationerror(err.message, 400));
     }
     // if (emailCheck != null || usernameCheck != null) {
     //   return res
@@ -82,8 +148,9 @@ class RegisterController {
 
     const role = req.body.userRole;
     res.status(200).json({ message: "ok" });
-    // this verification link to be sent to user email 
-     
+  }
+    // this verification link to be sent to user email
+
     // this.sendVerifyToken(req);
     // if (role == "seller") {
     //    this.verifySeller(req);
@@ -92,42 +159,10 @@ class RegisterController {
     //    this.verifyAdmin(req);
     // }
 
-
-  }
-
-
   // token will be sent to all users for verification
-  async sendVerifyToken(req) {
-    const token = User.createVerificationToken();
-    await User.save({ validateBeforeSave: false });
-    const checkURL = `${req.protocol}://${req.get(
-      "host"
-    )}/api/user/verification/${token}`;
-    res.send(checkURL);
-  }
+  
 
-  //  checking of token to verify the user
-  async checkToken(req, res) {
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(req.params.token)
-      .digest("hex");
-
-    const user = await User.findOne({
-      passwordResetToken: hashedToken,
-    });
-    if (!user) {
-     return next (new validationerror("Token is invalid or has expired", 400));
-    }
-    else {
-      // making first verification true for every user after checking the token
-      user.verified = "true",
-
-        res.send("User verified");
-    }
-  }
-
-  // the req json should be in the form of: see sellerVerifyModel and 
+  // the req json should be in the form of: see sellerVerifyModel and
   // req should contain the userID of the seller
   // async verifySeller(req, res) {
 

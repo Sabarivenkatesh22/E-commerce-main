@@ -8,3 +8,23 @@
 
 
 http://{{baseurl}}:{{baseport}}/api/user/login
+
+
+new features to implement
+
+Next Feature - Validation
+
+Email Verification
+- Email verification link will be sent while registering the account
+- All the APIs will stop working without email verification. This can be excluded for publicly available apis
+- If a user tries to change his email, It must also turn verification as false and resend the verification email
+- Add a API for resending verification email (sometimes email does not reach the user)
+- Verification email must be valid till 24hours and must expire after that
+
+Forget Password
+- Email address will be sent for requesting reset password link
+- Link will be valid till 24hours and must expire after that
+- A user cannot request reset password link more than 2 times for a day
+
+Change Password
+- Whenever a user changes the password, a email must be sent to the respective email that the password has reset. Old password must also be entered for validation.
