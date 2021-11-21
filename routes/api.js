@@ -57,7 +57,7 @@ router.post("/subAdmin/register",requireSignin, isAuthForAdmin,adminChecking('ad
 // VERIFICATION
 router.get("/user/verification/:token", emailController.checkToken);
 // CHANGE EMAIL
-router.post("/user/:userId/changeEmail",userVerification ,userById, requireSignin, isAuth, registerController.changeEmail);
+router.post("/user/:userId/changeEmail",userById, requireSignin, isAuth, registerController.changeEmail);
 
 // CHANGE PASSWORD
 router.post("/user/:userId/changePassword",userVerification ,userById, requireSignin,isAuth, forgetPasswordController.changePassword);

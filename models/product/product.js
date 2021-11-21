@@ -28,9 +28,9 @@ const productSchema = new Schema(
       maxlength: 32
     },
     category: {
-      type: String,
-      ref: 'Category',
-      required: true
+      type:String,
+      enum: ['Clothing','Toys','Sports','Beauty','Automobiles','Books','Media','Natural','Dairy','Food'],
+      required:[true,'A product must have a category']
     },
     quantity: {
       type: Number,

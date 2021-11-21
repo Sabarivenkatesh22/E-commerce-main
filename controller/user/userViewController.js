@@ -23,7 +23,7 @@ class UserViewController {
                                             firstname:user.firstname,
                                             lastname:user.lastname,
                                             role:user.userRole,
-                                            addressId:user.addressId,
+                                            addressName:user.addressName,
                                             contactNumber:user.contactNumber,
                                             verified:user.verified});
           }
@@ -34,7 +34,7 @@ class UserViewController {
                                             firstname:user.firstname,
                                             lastname:user.lastname,
                                             role:user.userRole,
-                                            addressId:user.addressId,
+                                            addressName:user.addressName,
                                             contactNumber:user.contactNumber,
                                             verified:user.verified,
                                             adminVerification:user.verifiedByAdmin});
@@ -46,7 +46,7 @@ class UserViewController {
                                             firstname:user.firstname,
                                             lastname:user.lastname,
                                             role:user.userRole,
-                                            addressId:user.addressId,
+                                            addressName:user.addressName,
                                             contactNumber:user.contactNumber,
                                             verified:user.verified,
                                             manualVerification:user.manualVerification});

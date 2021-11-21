@@ -10,7 +10,7 @@ const Hashing = require("../../utils/hashing");
 
 class EmailController
 {
-    async sendVerifyToken(req,next) {
+    async sendVerifyToken(res,req,next) {
         try {
           console.log("from sendVerifyToken");
           const user = await User.findOne({ email: req.body.email });
@@ -24,6 +24,7 @@ class EmailController
           new Email(user, checkURL).sendWelcome();
     
           console.log(checkURL);
+          res.send("Done");
         } catch (error) {
           return next(new validationerror(error.message,400));
         }

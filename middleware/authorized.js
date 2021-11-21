@@ -113,17 +113,20 @@ exports.adminChecking = (...roles) => {
     next();
   };
 };
-
+// allowing only verifeid users 
 exports.userVerification = async (req,res,next) => {
     // roles ['admin', 'lead-guide']. role='user'
-    const user = await User.findOne({userId: req.params.userId});
-    console.log("from user verification");
-    console.log(user);
-    // user ? user : return next(new validationerror("invalid email and password"));
-    if (!(user.verified)) {
+
+    // important: enable this for allowing verifeid users
+    
+    // const user = await User.findOne({userId: req.params.userId});
+    // console.log("from user verification");
+    // console.log(user);
+    
+    // if (!(user.verified)) {
       
-       return next(new validationerror('You are not verified, please check your email for verification', 403));      
-    }
+    //    return next(new validationerror('You are not verified, please check your email for verification', 403));      
+    // }
 
     next();
   

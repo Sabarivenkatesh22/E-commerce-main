@@ -133,6 +133,7 @@ class DeliveryPageController {
                 { customerId: req.params.userId }
     
             );
+            const user = await User.findOne({userId: req.params.userId});
             // TODO: DO THIS ASS FAST AS POSSIBLE
 
             deliveryPage.productId.forEach((e)=>{
@@ -157,6 +158,9 @@ class DeliveryPageController {
             if (statusOfProduct == "cancelled") {
                 deliveredProduct.sold = deliveredProduct.sold - 1;
                 deliveredProduct.quantity = deliveredProduct.quantity + 1;
+            }
+            if(statusOfProduct == "delivered"){
+                user.NumberOfSuccessfulOrders = user.NumberOfSuccessfulOrders + 1;
             }
             // add points to userModel if the status is delivered
             await deliveredProduct.save();

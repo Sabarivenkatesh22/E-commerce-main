@@ -105,7 +105,8 @@ class RazorPay {
         console.log(req.body);
 
         response = { "signatureIsValid": "false" }
-        res.send(response);
+        // res.send(response);
+        res.status(400).json(response);
     };
 }
 

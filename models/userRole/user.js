@@ -50,10 +50,11 @@ const userSchema = new Schema(
       type:Boolean,
       default: false
     },
-    addressId: {
+    addressName: {
       type: String,
       default: "Not Updated"
     },
+    // Street, Landmark, City, State, Country, Pin-code
     contactNumber: {
       type: String,
       required: [true,'please provide your contactnumber!'],
@@ -88,6 +89,10 @@ const userSchema = new Schema(
     token:String,
     confirmEmailHashedToken: String,
     // verifySellerHashedToken: String,
+    NumberOfSuccessfulOrders:{
+      type:Number,
+      default:0,
+    },
   },
    
   {
@@ -130,7 +135,7 @@ userSchema.methods.createEmailVerificationToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
   this.confirmEmailHashedToken = Hashing.hash(resetToken, resetToken.length);
   console.log({ resetToken }, this.confirmEmailHashedToken);
-
+  console.log("from email verification");
   // console.log({ verifyToken }, this.verificationToken);
 
   return resetToken;

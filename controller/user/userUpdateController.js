@@ -20,10 +20,11 @@ class UserUpdateController {
             var firstname = req.body.firstname || user.firstname;
             var lastname = req.body.lastname || user.lastname;
             var contactNumber = req.body.contactNumber || user.contactNumber;
-
+            var username = req.body.username || user.username;
             user.firstname = firstname;
             user.lastname = lastname;
             user.contactNumber = contactNumber;
+            user.username = username;
             user.updatedAt = moment(Date.now()).unix();
             await user.save();
 

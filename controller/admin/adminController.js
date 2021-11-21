@@ -14,7 +14,7 @@ class AdminController {
                     const whoIsUsing = await User.findOne({email: req.body.adminEmail});
                     const seller = await sellerVerifyModel.create({
                         contactNumber: req.body.contactNumber,
-                        addressId: req.body.addressId,
+                        addressName: req.body.addressName,
                         verifiedBy: whoIsUsing.email
                     });
                     user.verifiedByAdmin = true;
@@ -28,7 +28,7 @@ class AdminController {
                 if (!user.verifiedByAdmin) {
                     const seller = await sellerVerifyModel.create({
                         contactNumber: req.body.contactNumber,
-                        addressId: req.body.addressId,
+                        addressName: req.body.addressName,
                         verifiedBy: whoIsUsing.email
                     });
                     user.verifiedByAdmin = true;

@@ -64,12 +64,12 @@ class RegisterController {
   // important: send only new email in req
   async changeEmail(req, res,next) {
     try {
-      let user = User.findOne(req.params.userId);
+      let user = await User.findOne({userId:req.params.userId});
       user.email = req.body.email;
       user.verified = false;
-      emailController.sendVerifyToken(req,next);
+      emailController.sendVerifyToken(res,req,next);
       // this.sendToken(req);
-      user.save();
+      await user.save();
     } catch (error) {
       return next(new validationerror(error.message,400));
     }
@@ -115,7 +115,9 @@ class RegisterController {
       console.log(resultCartList);
       console.log(resultWishList);
       console.log(resultDeliveryPage);
-      emailController.sendVerifyToken(req,next);
+      // important: enable this for sending email to user
+      // emailController.sendVerifyToken(req,next);
+      
       // this.sendToken(req);
       // this.toPrint();
     } catch (err) {
@@ -170,7 +172,7 @@ class RegisterController {
   //   if (!user) return next(new validationerror("User is not found", 400));
   //   const seller = await sellerVerifyModel.create({
   //     contactNumber: req.body.contactNumber,
-  //     addressId: req.body.addressId,
+  //     addressName: req.body.addressName,
   //   });
   //   if (seller != null) {
   //     user.verifiedByAdmin = "true";
