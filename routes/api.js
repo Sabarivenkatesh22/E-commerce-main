@@ -25,6 +25,8 @@ const productImageController = require('../controller/product/productImageContro
 const productViewController = require('../controller/product/productViewController')
 const reviewController = require('../controller/product/reviewController')
 
+// USER CATEGORY CONTROLLER
+const MVPController = require('../controller/user/MVPController');
 // ADMIN
 const adminController = require('../controller/admin/adminController');
 
@@ -108,6 +110,11 @@ router.get("/user/:userId/getDeliveryPage", userVerification ,userById, requireS
 router.post("/user/:userId/createDeliveryPage", userVerification ,userById, requireSignin, isAuth, DeliveryPageController.createDeliveryPage);
 router.post("/user/:userId/deleteDeliveryItem", userVerification ,userById, requireSignin, isAuth, DeliveryPageController.deleteDeliveryItem);
 
+// USER CATEGORY RECOMMENDATION
+router.post("/user/:userId/addMVP", userVerification ,userById, requireSignin, isAuth, MVPController.addMVP);
+router.get("/user/:userId/getMVP", userVerification ,userById, requireSignin, isAuth, MVPController.getMVP);
+
+
 //PRODUCT-ADD (only sellers permission)
 router.post("/seller/:userId/product/add", userVerification ,userById, requireSignin, isAuth, restrictTo("seller"), productAddController.addProduct);
 
@@ -127,7 +134,7 @@ router.get("/user", userUpdateController.deleteUser);
 
 // product delete
 
-// router.get("/user/product", productUpdateController.deleteProduct);
+router.get("/user/product", productUpdateController.deleteProduct);
 // router.get("/user/delCartList", productUpdateController.deleteCartList);
 // router.get("/user/delWishList", productUpdateController.deleteWishList);
 // router.get("/user/deleteDeliveryPage", productUpdateController.deleteDeliveryPage);

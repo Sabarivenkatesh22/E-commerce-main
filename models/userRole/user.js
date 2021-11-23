@@ -93,6 +93,10 @@ const userSchema = new Schema(
       type:Number,
       default:0,
     },
+    MostVisitedProduct:[{
+      type:String,
+      enum: ['Clothing','Toys','Sports','Beauty','Automobiles','Books','Media','Natural','Dairy','Food','Accessories']
+    }],
   },
    
   {

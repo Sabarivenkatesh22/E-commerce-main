@@ -29,7 +29,7 @@ const productSchema = new Schema(
     },
     category: {
       type:String,
-      enum: ['Clothing','Toys','Sports','Beauty','Automobiles','Books','Media','Natural','Dairy','Food'],
+      enum: ['Clothing','Toys','Sports','Beauty','Automobiles','Books','Media','Natural','Dairy','Food','Accessories'],
       required:[true,'A product must have a category']
     },
     quantity: {

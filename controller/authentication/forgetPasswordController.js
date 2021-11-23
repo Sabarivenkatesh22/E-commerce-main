@@ -84,9 +84,12 @@ class ForgetPasswordController {
       }
       if (bcrypt.compareSync(req.body.oldPassword, user.password)) {
         console.log(user);
-        user.password = req.body.newPassword;
-        user.save();
-        new email(user).sendChangedPasswordNotification();
+        let salt = bcrypt.genSaltSync(10)
+        let pass = req.body.newPassword;
+        let password = bcrypt.hashSync(pass, salt);
+        user.password = password;
+        await user.save();
+        // new email(user).sendChangedPasswordNotification();
         res.send("Done");
       }
 
